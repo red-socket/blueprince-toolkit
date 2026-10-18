@@ -80,37 +80,16 @@ export interface Border {
   id: string;
   name: string;
   color: string; // banner colour
-  ink: string; // ink that reads on the banner colour
   pattern: BorderPattern;
 }
 
 export const BORDERS: Border[] = [
-  { id: 'black', name: 'Black', color: '#1a1a1a', ink: '#ffffff', pattern: 'beads' },
-  { id: 'white', name: 'White', color: '#e8e8e8', ink: '#2b2b2b', pattern: 'chain' },
-  { id: 'yellow', name: 'Yellow', color: '#d4af37', ink: '#ffffff', pattern: 'chevrons' },
-  { id: 'pink', name: 'Pink', color: '#b85c82', ink: '#ffffff', pattern: 'rails' },
-  { id: 'red', name: 'Red', color: '#9e3030', ink: '#ffffff', pattern: 'waves' },
-  { id: 'orange', name: 'Orange', color: '#d97634', ink: '#ffffff', pattern: 'stars' },
-  { id: 'green', name: 'Green', color: '#2f6339', ink: '#ffffff', pattern: 'slashes' },
-  { id: 'violet', name: 'Violet', color: '#6b4c8a', ink: '#ffffff', pattern: 'ticks' },
-];
-
-/** The eight realms' sigils, as indices into the lists above. Spoiler: Inner Sanctum solutions. */
-export interface Realm {
-  core: number;
-  travel: number;
-  weather: number;
-  society: number;
-  border: number;
-}
-
-export const REALMS: Realm[] = [
-  { core: 0, travel: 2, weather: 3, society: 5, border: 2 }, // Arch Aries
-  { core: 1, travel: 0, weather: 5, society: 4, border: 5 }, // Corarica
-  { core: 2, travel: 2, weather: 2, society: 7, border: 7 }, // Eraja
-  { core: 3, travel: 0, weather: 1, society: 2, border: 4 }, // Fenn Aries
-  { core: 4, travel: 6, weather: 0, society: 1, border: 1 }, // Mora Jai
-  { core: 5, travel: 3, weather: 6, society: 2, border: 6 }, // Nuance
-  { core: 6, travel: 2, weather: 1, society: 3, border: 0 }, // Orinda Aries
-  { core: 7, travel: 5, weather: 4, society: 6, border: 3 }, // Verra
+  { id: 'black', name: 'Black', color: '#1a1a1a', pattern: 'beads' },
+  { id: 'white', name: 'White', color: '#e8e8e8', pattern: 'chain' },
+  { id: 'yellow', name: 'Yellow', color: '#d4af37', pattern: 'chevrons' },
+  { id: 'pink', name: 'Pink', color: '#b85c82', pattern: 'rails' },
+  { id: 'red', name: 'Red', color: '#9e3030', pattern: 'waves' },
+  { id: 'orange', name: 'Orange', color: '#d97634', pattern: 'stars' },
+  { id: 'green', name: 'Green', color: '#2f6339', pattern: 'slashes' },
+  { id: 'violet', name: 'Violet', color: '#6b4c8a', pattern: 'ticks' },
 ];

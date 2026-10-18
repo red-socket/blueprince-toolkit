@@ -1,11 +1,8 @@
 import { render } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import '@fontsource/cinzel/500.css';
+import '@fontsource/cinzel/600.css';
 import '@fontsource/cinzel/700.css';
-import '@fontsource/eb-garamond/400.css';
-import '@fontsource/eb-garamond/400-italic.css';
-import '@fontsource/courier-prime/400.css';
-import '@fontsource/courier-prime/700.css';
+import '@fontsource-variable/inter';
 import './styles/global.css';
 import { TIER_LABEL } from './spoilers';
 import { TOOLS } from './tools/registry';
@@ -29,7 +26,7 @@ function Home() {
         {TOOLS.map((t) => (
           <li key={t.id}>
             <a class="tool-card panel" href={`#/${t.id}`}>
-              <span class="tool-card__kind">{t.kind}</span>
+              <span class="tool-card__kind label">{t.kind}</span>
               <span class={`tier tier--${t.tier}`}>{TIER_LABEL[t.tier]}</span>
               <h2>{t.title}</h2>
               <p>{t.blurb}</p>
@@ -38,7 +35,7 @@ function Home() {
         ))}
         <li>
           <div class="tool-card tool-card--soon">
-            <span class="tool-card__kind">Coming next</span>
+            <span class="tool-card__kind label">Coming next</span>
             <h2>More tools</h2>
             <p>Puzzle helpers, a house planner and more generators are on the way.</p>
           </div>
@@ -66,10 +63,12 @@ function App() {
   return (
     <>
       <header class="site-header">
-        <a class="site-header__brand" href="#/">
-          <span class="site-header__mark" aria-hidden="true" />
-          Blue Prince Toolkit
-        </a>
+        <div class="site-header__inner">
+          <a class="site-header__brand" href="#/">
+            <span class="site-header__mark" aria-hidden="true" />
+            Blue Prince Toolkit
+          </a>
+        </div>
       </header>
       <main class="site-main">
         <Page />

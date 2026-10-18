@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
-import { Spoiler, ToolGate } from '../../components/Spoiler';
-import { useReveal } from '../../spoilers';
-import { BORDERS, CORES, REALMS, SOCIETIES, TRAVELS, WEATHERS } from './data';
+import { ToolGate } from '../../components/Spoiler';
+import { BORDERS, CORES, SOCIETIES, TRAVELS, WEATHERS } from './data';
 import { copyPng, downloadPng, downloadSvg } from './export';
 import {
   borderIcon,
@@ -11,7 +10,6 @@ import {
   societyIcon,
   travelIcon,
   weatherIcon,
-  type Layout,
   type SigilSpec,
   type SigilStyle,
 } from './render';
@@ -19,17 +17,15 @@ import './sigil.css';
 
 const PAPER = '#efe7d4';
 const BLUEPRINT = '#1d4277';
-const INK_BLACK = '#1b1b1b';
-const INK_WHITE = '#ffffff';
 
 type InkChoice = 'auto' | 'black' | 'white' | 'banner' | 'custom';
 type BgChoice = 'none' | 'paper' | 'blueprint' | 'banner' | 'custom';
 
 const DEFAULT_SPEC: SigilSpec = { core: 0, travel: 6, weather: 0, society: 0, border: 0 };
 
-// ---- URL state: #/sigil?c=0&t=6&w=0&m=0&b=0&l=sigil (indices only, so no spoiler words in links) ----
+// ---- URL state: #/sigil?c=0&t=6&w=0&m=0&b=0 (indices only, so links don't name any part) ----
 
-function readHash(): { spec: SigilSpec; layout: Layout } {
+function readHash(): SigilSpec {
   const q = new URLSearchParams(location.hash.split('?')[1] ?? '');
   const idx = (key: string, list: unknown[], fallback: number | null): number | null => {
     if (!q.has(key)) return fallback;
@@ -38,27 +34,18 @@ function readHash(): { spec: SigilSpec; layout: Layout } {
     const n = Number(v);
     return Number.isInteger(n) && n >= 0 && n < list.length ? n : fallback;
   };
-  const l = q.get('l');
   return {
-    spec: {
-      core: idx('c', CORES, DEFAULT_SPEC.core),
-      travel: idx('t', TRAVELS, DEFAULT_SPEC.travel),
-      weather: idx('w', WEATHERS, DEFAULT_SPEC.weather) ?? 0,
-      society: idx('m', SOCIETIES, DEFAULT_SPEC.society),
-      border: idx('b', BORDERS, DEFAULT_SPEC.border),
-    },
-    layout: l === 'core' || l === 'flag' ? l : 'sigil',
+    core: idx('c', CORES, DEFAULT_SPEC.core),
+    travel: idx('t', TRAVELS, DEFAULT_SPEC.travel),
+    weather: idx('w', WEATHERS, DEFAULT_SPEC.weather) ?? 0,
+    society: idx('m', SOCIETIES, DEFAULT_SPEC.society),
+    border: idx('b', BORDERS, DEFAULT_SPEC.border),
   };
 }
 
-function writeHash(spec: SigilSpec, layout: Layout) {
+function writeHash(spec: SigilSpec) {
   const v = (n: number | null) => (n === null ? '-' : String(n));
-  const q = `c=${v(spec.core)}&t=${v(spec.travel)}&w=${spec.weather}&m=${v(spec.society)}&b=${v(spec.border)}&l=${layout}`;
-  history.replaceState(null, '', `#/sigil?${q}`);
-}
-
-function sameSpec(a: SigilSpec, b: SigilSpec) {
-  return a.core === b.core && a.travel === b.travel && a.weather === b.weather && a.society === b.society && a.border === b.border;
+  history.replaceState(null, '', `#/sigil?c=${v(spec.core)}&t=${v(spec.travel)}&w=${spec.weather}&m=${v(spec.society)}&b=${v(spec.border)}`);
 }
 
 const rand = (n: number) => Math.floor(Math.random() * n);
@@ -75,17 +62,16 @@ interface PickerProps {
   sub?: (i: number) => string | undefined;
   icon: (i: number) => string;
   allowNone?: boolean;
-  wide?: boolean;
 }
 
-function Picker({ title, hint, count, value, onChange, label, sub, icon, allowNone = true, wide }: PickerProps) {
+function Picker({ title, hint, count, value, onChange, label, sub, icon, allowNone = true }: PickerProps) {
   return (
     <fieldset class="picker">
       <legend>
         {title}
-        {hint && <span class="picker__hint"> {hint}</span>}
+        {hint && <span class="picker__hint">{hint}</span>}
       </legend>
-      <div class={`picker__grid${wide ? ' picker__grid--wide' : ''}`}>
+      <div class="picker__grid">
         {allowNone && (
           <button type="button" class="tile tile--none" aria-pressed={value === null} onClick={() => onChange(null)}>
             <span class="tile__icon" aria-hidden="true">
@@ -107,16 +93,18 @@ function Picker({ title, hint, count, value, onChange, label, sub, icon, allowNo
   );
 }
 
-function Segmented<T extends string>({
+function Choices<T extends string>({
   label,
   value,
   options,
   onChange,
+  children,
 }: {
   label: string;
   value: T;
   options: [T, string][];
   onChange: (v: T) => void;
+  children?: preact.ComponentChildren;
 }) {
   return (
     <div class="field">
@@ -127,6 +115,7 @@ function Segmented<T extends string>({
             {text}
           </button>
         ))}
+        {children}
       </div>
     </div>
   );
@@ -135,29 +124,20 @@ function Segmented<T extends string>({
 // ---- the tool ----
 
 function Maker() {
-  const initial = useMemo(readHash, []);
-  const [spec, setSpec] = useState<SigilSpec>(initial.spec);
-  const [layout, setLayout] = useState<Layout>(initial.layout);
+  const [spec, setSpec] = useState<SigilSpec>(readHash);
   const [inkChoice, setInkChoice] = useState<InkChoice>('auto');
   const [customInk, setCustomInk] = useState('#3a2f5c');
   const [bgChoice, setBgChoice] = useState<BgChoice>('none');
   const [customBg, setCustomBg] = useState('#f4ead5');
   const [bandFill, setBandFill] = useState(true);
   const [weight, setWeight] = useState(1);
-  const [flagEmblem, setFlagEmblem] = useState<'core' | 'sigil'>('core');
   const [pngSize, setPngSize] = useState(1024);
   const [status, setStatus] = useState('');
-  const [realmsShown] = useReveal('sigil-realms');
 
-  useEffect(() => writeHash(spec, layout), [spec, layout]);
+  useEffect(() => writeHash(spec), [spec]);
   // A sigil link pasted while the tool is open (replaceState above doesn't fire hashchange).
   useEffect(() => {
-    const on = () => {
-      if (!location.hash.startsWith('#/sigil')) return;
-      const h = readHash();
-      setSpec(h.spec);
-      setLayout(h.layout);
-    };
+    const on = () => location.hash.startsWith('#/sigil') && setSpec(readHash());
     window.addEventListener('hashchange', on);
     return () => window.removeEventListener('hashchange', on);
   }, []);
@@ -168,65 +148,47 @@ function Maker() {
   }, [status]);
 
   const banner = spec.border !== null ? BORDERS[spec.border].color : '#d4af37';
-  const ink = { auto: 'auto', black: INK_BLACK, white: INK_WHITE, banner, custom: customInk }[inkChoice];
+  const ink = { auto: 'auto', black: '#1b1b1b', white: '#ffffff', banner, custom: customInk }[inkChoice];
   const background = { none: null, paper: PAPER, blueprint: BLUEPRINT, banner, custom: customBg }[bgChoice];
-  const style: SigilStyle = { layout, ink, background, bandFill, weight, flagEmblem };
-  const built = useMemo(() => buildSvg(spec, style), [spec, layout, ink, background, bandFill, weight, flagEmblem]);
+  const style: SigilStyle = { ink, background, bandFill, weight };
+  const built = useMemo(() => buildSvg(spec, style), [spec, ink, background, bandFill, weight]);
 
-  // What the preview stage shows behind a transparent picture: a dark stage for light ink.
+  // Behind a transparent picture, the preview uses a dark checkerboard for light ink.
   const stageDark = background === null && (inkChoice === 'white' || (inkChoice === 'custom' && isLight(customInk)));
 
   const set = (patch: Partial<SigilSpec>) => setSpec((s) => ({ ...s, ...patch }));
-  const filename = () => {
-    const parts = [
+  const filename = () =>
+    [
       'sigil',
-      spec.core !== null ? CORES[spec.core].shape : null,
+      spec.core !== null ? CORES[spec.core].id : null,
       spec.travel !== null ? TRAVELS[spec.travel].id : null,
       spec.travel !== null ? WEATHERS[spec.weather].id : null,
       spec.society !== null ? SOCIETIES[spec.society].name : null,
       spec.border !== null ? BORDERS[spec.border].id : null,
-      layout !== 'sigil' ? layout : null,
-    ];
-    return parts.filter(Boolean).join('-').toLowerCase();
-  };
-  const matchedRealm = REALMS.findIndex((r) =>
-    sameSpec({ core: r.core, travel: r.travel, weather: r.weather, society: r.society, border: r.border }, spec),
-  );
-
-  const randomize = () =>
-    setSpec({
-      core: rand(CORES.length),
-      travel: rand(TRAVELS.length),
-      weather: rand(WEATHERS.length),
-      society: rand(SOCIETIES.length),
-      border: rand(BORDERS.length),
-    });
+    ]
+      .filter(Boolean)
+      .join('-')
+      .toLowerCase();
 
   return (
     <div class="sigil">
       <header class="tool-head">
         <h1>Sigil Maker</h1>
-        <p>
-          Pick a core, rays, motes and a border, then export the result. Your choices are kept in the link, so you can
-          share a sigil by copying the address.
-        </p>
+        <p>Pick a core, rays, motes and a border, then export the sigil. The link keeps your choices, so copying the address shares the sigil.</p>
       </header>
 
       <div class="sigil__layout">
         <section class="sigil__preview panel" aria-label="Preview">
           <div
-            class={`stage stage--${layout}${background === null ? ' stage--transparent' : ''}${stageDark ? ' stage--dark' : ''}`}
+            class={`stage${background === null ? ' stage--transparent' : ''}${stageDark ? ' stage--dark' : ''}`}
             role="img"
             aria-label={describe(spec)}
             dangerouslySetInnerHTML={{ __html: built.svg }}
           />
           <dl class="reading">
             <div>
-              <dt>Core</dt>
-              <dd>
-                {spec.core !== null ? CORES[spec.core].shape : 'None'}
-                {matchedRealm >= 0 && realmsShown && <em> · the sigil of {CORES[REALMS[matchedRealm].core].name}</em>}
-              </dd>
+              <dt>Realm</dt>
+              <dd>{spec.core !== null ? CORES[spec.core].name : 'None'}</dd>
             </div>
             <div>
               <dt>Transportation</dt>
@@ -241,7 +203,7 @@ function Maker() {
               <dd>{spec.society !== null ? SOCIETIES[spec.society].name : 'None'}</dd>
             </div>
             <div>
-              <dt>Border</dt>
+              <dt>Colour</dt>
               <dd>{spec.border !== null ? BORDERS[spec.border].name : 'None'}</dd>
             </div>
           </dl>
@@ -255,10 +217,12 @@ function Maker() {
                 Download PNG
               </button>
               <label class="export__size">
-                <span class="visually-hidden">PNG width</span>
+                <span class="visually-hidden">PNG size</span>
                 <select value={pngSize} onChange={(e) => setPngSize(Number(e.currentTarget.value))}>
                   {[128, 256, 512, 1024, 2048, 4096].map((n) => (
-                    <option key={n} value={n}>{n} px</option>
+                    <option key={n} value={n}>
+                      {n} px
+                    </option>
                   ))}
                 </select>
               </label>
@@ -297,14 +261,22 @@ function Maker() {
             <div class="panel__head">
               <h2>Parts</h2>
               <div class="panel__actions">
-                <button type="button" class="btn btn--small" onClick={randomize}>
-                  Random
-                </button>
                 <button
                   type="button"
                   class="btn btn--small"
-                  onClick={() => setSpec({ core: null, travel: null, weather: 0, society: null, border: null })}
+                  onClick={() =>
+                    setSpec({
+                      core: rand(CORES.length),
+                      travel: rand(TRAVELS.length),
+                      weather: rand(WEATHERS.length),
+                      society: rand(SOCIETIES.length),
+                      border: rand(BORDERS.length),
+                    })
+                  }
                 >
+                  Random
+                </button>
+                <button type="button" class="btn btn--small" onClick={() => setSpec({ core: null, travel: null, weather: 0, society: null, border: null })}>
                   Clear
                 </button>
               </div>
@@ -315,12 +287,13 @@ function Maker() {
               count={CORES.length}
               value={spec.core}
               onChange={(core) => set({ core })}
-              label={(i) => CORES[i].shape}
+              label={(i) => CORES[i].name}
+              sub={(i) => CORES[i].shape}
               icon={(i) => coreIcon(i, 'currentColor')}
             />
             <Picker
               title="Rays"
-              hint="number of rays: transportation"
+              hint="transportation"
               count={TRAVELS.length}
               value={spec.travel}
               onChange={(travel) => set({ travel })}
@@ -355,121 +328,54 @@ function Maker() {
               value={spec.border}
               onChange={(border) => set({ border })}
               label={(i) => BORDERS[i].name}
-              icon={(i) => borderIcon(i, INK_BLACK)}
+              icon={(i) => borderIcon(i, '#1b1b1b')}
             />
           </div>
 
           <div class="panel">
             <h2>Style</h2>
-            <Segmented<Layout>
-              label="Picture"
-              value={layout}
+            <Choices<InkChoice>
+              label="Ink"
+              value={inkChoice}
               options={[
-                ['sigil', 'Full sigil'],
-                ['core', 'Core icon'],
-                ['flag', 'Flag'],
+                ['auto', 'Auto'],
+                ['black', 'Black'],
+                ['white', 'White'],
+                ['banner', 'Border colour'],
+                ['custom', 'Custom'],
               ]}
-              onChange={setLayout}
-            />
-            {layout === 'flag' && (
-              <Segmented<'core' | 'sigil'>
-                label="On the flag"
-                value={flagEmblem}
-                options={[
-                  ['core', 'Core'],
-                  ['sigil', 'Full sigil'],
-                ]}
-                onChange={setFlagEmblem}
-              />
-            )}
-            <div class="field">
-              <span class="field__label">Ink</span>
-              <div class="segmented" role="radiogroup" aria-label="Ink">
-                {(
-                  [
-                    ['auto', 'Auto'],
-                    ['black', 'Black'],
-                    ['white', 'White'],
-                    ['banner', 'Banner colour'],
-                    ['custom', 'Custom'],
-                  ] as [InkChoice, string][]
-                ).map(([v, t]) => (
-                  <button key={v} type="button" role="radio" aria-checked={inkChoice === v} onClick={() => setInkChoice(v)}>
-                    {t}
-                  </button>
-                ))}
-                {inkChoice === 'custom' && (
-                  <input type="color" aria-label="Custom ink colour" value={customInk} onInput={(e) => setCustomInk(e.currentTarget.value)} />
-                )}
-              </div>
-              {layout === 'flag' && spec.border !== null && <p class="field__note">On a flag, any ink that wouldn't show on the banner switches to black or white.</p>}
-            </div>
-            {layout !== 'flag' || spec.border === null ? (
-              <div class="field">
-                <span class="field__label">Background</span>
-                <div class="segmented" role="radiogroup" aria-label="Background">
-                  {(
-                    [
-                      ['none', 'Transparent'],
-                      ['paper', 'Paper'],
-                      ['blueprint', 'Blueprint'],
-                      ['banner', 'Banner colour'],
-                      ['custom', 'Custom'],
-                    ] as [BgChoice, string][]
-                  ).map(([v, t]) => (
-                    <button key={v} type="button" role="radio" aria-checked={bgChoice === v} onClick={() => setBgChoice(v)}>
-                      {t}
-                    </button>
-                  ))}
-                  {bgChoice === 'custom' && (
-                    <input type="color" aria-label="Custom background colour" value={customBg} onInput={(e) => setCustomBg(e.currentTarget.value)} />
-                  )}
-                </div>
-              </div>
-            ) : (
-              <p class="field__note">The flag uses the border's banner colour as its background.</p>
-            )}
-            {layout === 'sigil' && (
-              <label class="check">
-                <input type="checkbox" checked={bandFill} onChange={(e) => setBandFill(e.currentTarget.checked)} />
-                Fill the border with its banner colour
-              </label>
-            )}
-            {layout !== 'core' && (
-              <label class="field">
-                <span class="field__label">
-                  Line weight <output>{weight.toFixed(1)}×</output>
-                </span>
-                <input
-                  type="range"
-                  min="0.5"
-                  max="2"
-                  step="0.1"
-                  value={weight}
-                  onInput={(e) => setWeight(Number(e.currentTarget.value))}
-                />
-              </label>
-            )}
-          </div>
-
-          <div class="panel">
-            <h2>Realm sigils</h2>
-            <Spoiler id="sigil-realms" tier="late" label="The eight realms' complete sigils. These are the solutions to the sigil rooms.">
-              <div class="realms">
-                {REALMS.map((r, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    class="tile"
-                    aria-pressed={matchedRealm === i}
-                    onClick={() => setSpec({ core: r.core, travel: r.travel, weather: r.weather, society: r.society, border: r.border })}
-                  >
-                    <span class="tile__icon" dangerouslySetInnerHTML={{ __html: coreIcon(r.core, 'currentColor') }} />
-                    <span class="tile__label">{CORES[r.core].name}</span>
-                  </button>
-                ))}
-              </div>
-            </Spoiler>
+              onChange={setInkChoice}
+            >
+              {inkChoice === 'custom' && (
+                <input type="color" aria-label="Custom ink colour" value={customInk} onInput={(e) => setCustomInk(e.currentTarget.value)} />
+              )}
+            </Choices>
+            <Choices<BgChoice>
+              label="Background"
+              value={bgChoice}
+              options={[
+                ['none', 'Transparent'],
+                ['paper', 'Paper'],
+                ['blueprint', 'Blueprint'],
+                ['banner', 'Border colour'],
+                ['custom', 'Custom'],
+              ]}
+              onChange={setBgChoice}
+            >
+              {bgChoice === 'custom' && (
+                <input type="color" aria-label="Custom background colour" value={customBg} onInput={(e) => setCustomBg(e.currentTarget.value)} />
+              )}
+            </Choices>
+            <label class="check">
+              <input type="checkbox" checked={bandFill} onChange={(e) => setBandFill(e.currentTarget.checked)} />
+              Fill the border with its colour
+            </label>
+            <label class="field">
+              <span class="field__label">
+                Line weight <output>{weight.toFixed(1)}×</output>
+              </span>
+              <input type="range" min="0.5" max="2" step="0.1" value={weight} onInput={(e) => setWeight(Number(e.currentTarget.value))} />
+            </label>
           </div>
         </section>
       </div>
@@ -488,7 +394,7 @@ export function SigilMaker() {
       id="tool-sigil"
       tier="late"
       title="Sigil Maker"
-      warning="This tool is about the realm sigils. They come up late in the game, and the tool names their parts and what each part means. The full sigil for each realm stays hidden behind a second button."
+      warning="This tool is about the realm sigils, which come up late in the game. It names every part of a sigil and what each part means."
     >
       <Maker />
     </ToolGate>

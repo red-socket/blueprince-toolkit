@@ -17,7 +17,7 @@ export const TOOLS: Tool[] = [
     id: 'sigil',
     title: 'Sigil Maker',
     kind: 'Generator',
-    blurb: 'Build a realm sigil from its parts and export it as an SVG or PNG icon, emblem or flag.',
+    blurb: 'Build a realm sigil from its parts and export it as an SVG or PNG.',
     tier: 'late',
     component: SigilMaker,
   },

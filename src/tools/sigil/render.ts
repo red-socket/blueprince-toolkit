@@ -14,15 +14,11 @@ export interface SigilSpec {
   border: number | null;
 }
 
-export type Layout = 'sigil' | 'core' | 'flag';
-
 export interface SigilStyle {
-  layout: Layout;
-  ink: string | 'auto'; // auto: the banner's own ink on flags, otherwise black or white to suit the background
+  ink: string; // a colour, or 'auto'
   background: string | null; // null = transparent
   bandFill: boolean; // fill the border band with the banner colour
   weight: number; // line weight multiplier
-  flagEmblem: 'core' | 'sigil';
 }
 
 const CORE_SIZE = 44;
@@ -202,7 +198,7 @@ function border(index: number, w: number, ink: string, bandFill: boolean): strin
 // ---- whole pictures ----
 
 /** The sigil itself, centred on 0,0, fitting in a circle of radius BAND_OUT. */
-export function sigilGroup(spec: SigilSpec, style: SigilStyle, ink = style.ink): string {
+function sigilGroup(spec: SigilSpec, style: SigilStyle, ink = style.ink): string {
   const w = 1.6 * style.weight;
   let s = '';
   if (spec.border !== null) s += border(spec.border, style.weight, ink, style.bandFill);
@@ -229,42 +225,18 @@ function wrap(viewBox: [number, number, number, number], body: string, bg: strin
 
 export function describe(spec: SigilSpec): string {
   const parts: string[] = [];
-  if (spec.core !== null) parts.push(CORES[spec.core].shape + ' core');
+  if (spec.core !== null) parts.push(CORES[spec.core].name + ' core');
   if (spec.travel !== null) parts.push(`${TRAVELS[spec.travel].name}, ${WEATHERS[spec.weather].name}`);
   if (spec.society !== null) parts.push(SOCIETIES[spec.society].name);
   if (spec.border !== null) parts.push(BORDERS[spec.border].name + ' border');
   return parts.length ? 'Sigil: ' + parts.join(', ') : 'Empty sigil';
 }
 
-/** Resolves the 'auto' ink for a picture drawn on `bg` (null = transparent). */
-function autoInk(bg: string | null): string {
-  return bg ? readableInk('#1b1b1b', bg) : '#1b1b1b';
-}
-
+/** The sigil on a square canvas. Ink 'auto' is black, or white on a dark background. */
 export function buildSvg(spec: SigilSpec, input: SigilStyle): BuiltSvg {
-  const title = describe(spec);
-  const banner = input.layout === 'flag' && spec.border !== null ? BORDERS[spec.border] : null;
-  const ink = input.ink !== 'auto' ? input.ink : banner ? banner.ink : autoInk(input.background);
-  const style = { ...input, ink };
-  if (style.layout === 'core') {
-    const body = spec.core !== null ? placedPath(CORE_PATHS[CORES[spec.core].id], 100, style.ink) : '';
-    return wrap([-56, -56, 112, 112], body, style.background, title);
-  }
-  if (style.layout === 'flag') {
-    // 3:2 banner in the border's colour, emblem centred.
-    const bg = banner?.color ?? style.background ?? '#e8e8e8';
-    const flagInk = banner ? readableInk(ink, banner.color) : ink;
-    let body: string;
-    if (style.flagEmblem === 'core') {
-      body = spec.core !== null ? placedPath(CORE_PATHS[CORES[spec.core].id], 40, flagInk) : '';
-    } else {
-      const k = 70 / BAND_OUT;
-      body = `<g transform="scale(${f(k * 1000) / 1000})">${sigilGroup(spec, { ...style, bandFill: false }, flagInk)}</g>`;
-    }
-    return wrap([-150, -100, 300, 200], body, bg, title);
-  }
+  const ink = input.ink !== 'auto' ? input.ink : input.background ? readableInk('#1b1b1b', input.background) : '#1b1b1b';
   const r = BAND_OUT + PAD;
-  return wrap([-r, -r, 2 * r, 2 * r], sigilGroup(spec, style), style.background, title);
+  return wrap([-r, -r, 2 * r, 2 * r], sigilGroup(spec, { ...input, ink }), input.background, describe(spec));
 }
 
 // ---- option icons (small previews for the pickers) ----

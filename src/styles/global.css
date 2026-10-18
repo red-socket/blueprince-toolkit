@@ -1,25 +1,33 @@
-/* Blueprint look: drafting-paper blue with a faint grid, chalk-white linework, brass accents. */
+/* Design tokens ("drafting": flat dark navy, brass accents). Components only use these variables. */
 :root {
-  --bp-deep: #132c52;
-  --bp: #1b3d6e;
-  --bp-raised: #21497f;
-  --grid: rgba(233, 238, 247, 0.06);
-  --grid-major: rgba(233, 238, 247, 0.11);
-  --chalk: #e9eef7;
-  --chalk-dim: #b4c3dc;
-  --line: rgba(233, 238, 247, 0.35);
-  --line-strong: rgba(233, 238, 247, 0.7);
-  --brass: #d4af37;
-  --brass-ink: #1f1a08;
-  --paper: #efe7d4;
-  --ink: #1b1b1b;
-  --tier-early: #6fbf8e;
-  --tier-mid: #e0a54a;
-  --tier-late: #e0675c;
-  --radius: 4px;
+  --bg: #16294a;
+  --header-bg: #11203b;
+  --surface: #1c335c;
+  --surface-hover: #23406f;
+  --border: rgba(226, 233, 245, 0.16);
+  --border-strong: rgba(226, 233, 245, 0.45);
+  --text: #e6ecf6;
+  --text-dim: #a9b8d2;
+  --accent: #d4af37;
+  --accent-hover: #e3c157;
+  --accent-ink: #1d1806;
+  --accent-soft: rgba(212, 175, 55, 0.16);
+  --input-bg: #11203b;
+  --shadow: none;
+  --tick: rgba(226, 233, 245, 0.55);
+  --tier-early: #79c79a;
+  --tier-mid: #e6ad55;
+  --tier-late: #ec7a6f;
   --font-display: 'Cinzel', 'Times New Roman', serif;
-  --font-body: 'EB Garamond', Georgia, serif;
-  --font-mono: 'Courier Prime', 'Courier New', monospace;
+  --font-body: 'Inter Variable', system-ui, sans-serif;
+  --font-label: 'Inter Variable', system-ui, sans-serif;
+  --display-weight: 600;
+  --display-spacing: 0.05em;
+  --display-transform: none;
+  --label-transform: uppercase;
+  --label-spacing: 0.08em;
+  --body-size: 16px;
+  --radius: 6px;
   color-scheme: dark;
 }
 
@@ -38,19 +46,9 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--bp);
-  background-image:
-    linear-gradient(var(--grid-major) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size:
-    120px 120px,
-    120px 120px,
-    24px 24px,
-    24px 24px;
-  color: var(--chalk);
-  font: 18px/1.5 var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  font: var(--body-size) / 1.6 var(--font-body);
 }
 
 #app {
@@ -60,25 +58,26 @@ body {
 }
 
 a {
-  color: var(--brass);
+  color: var(--accent);
 }
 
 h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 500;
-  letter-spacing: 0.04em;
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-spacing);
+  text-transform: var(--display-transform);
   line-height: 1.2;
   margin: 0 0 0.5em;
 }
 
 h1 {
-  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  font-size: clamp(1.9rem, 4vw, 2.5rem);
 }
 
 h2 {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
 }
 
 p {
@@ -86,7 +85,7 @@ p {
 }
 
 :focus-visible {
-  outline: 2px solid var(--brass);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -99,31 +98,46 @@ p {
   white-space: nowrap;
 }
 
+/* A small uppercase label, used for field names, kinds and tiers. */
+.label {
+  font: 600 0.75rem/1.4 var(--font-label);
+  letter-spacing: var(--label-spacing);
+  text-transform: var(--label-transform);
+}
+
 /* ---- frame ---- */
 
 .site-header {
-  border-bottom: 1px solid var(--line);
-  background: rgba(19, 44, 82, 0.85);
-  padding: 0.75rem 16px;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0.85rem 16px;
+}
+
+
+.site-header__inner {
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .site-header__brand {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  color: var(--chalk);
+  color: var(--text);
   text-decoration: none;
   font-family: var(--font-display);
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   font-size: 0.95rem;
 }
 
+
+
 .site-header__mark {
   width: 22px;
   height: 22px;
-  border: 2px solid var(--chalk);
+  border: 2px solid currentColor;
   border-radius: 50%;
   position: relative;
 }
@@ -132,7 +146,7 @@ p {
   content: '';
   position: absolute;
   inset: 5px;
-  background: var(--brass);
+  background: #d4af37;
 }
 
 .site-main {
@@ -140,14 +154,14 @@ p {
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem 16px 3rem;
+  padding: 2.25rem 16px 3rem;
 }
 
 .site-footer {
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
   padding: 1rem 16px;
   font-size: 0.85rem;
-  color: var(--chalk-dim);
+  color: var(--text-dim);
   text-align: center;
 }
 
@@ -157,36 +171,39 @@ p {
 
 /* ---- shared pieces ---- */
 
-/* A drafted panel: thin chalk outline with corner ticks. */
 .panel {
   position: relative;
-  background: rgba(19, 44, 82, 0.72);
-  border: 1px solid var(--line);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
+  box-shadow: var(--shadow);
   padding: 1.25rem;
 }
 
+/* Drafting corner ticks. */
 .panel::before,
 .panel::after {
   content: '';
   position: absolute;
-  width: 10px;
-  height: 10px;
-  border-color: var(--line-strong);
+  width: 12px;
+  height: 12px;
+  border-color: var(--tick);
   border-style: solid;
   pointer-events: none;
 }
 
 .panel::before {
-  top: -4px;
-  left: -4px;
-  border-width: 1px 0 0 1px;
+  top: 0;
+  left: 0;
+  border-width: 2px 0 0 2px;
+  border-top-left-radius: var(--radius);
 }
 
 .panel::after {
-  bottom: -4px;
-  right: -4px;
-  border-width: 0 1px 1px 0;
+  bottom: 0;
+  right: 0;
+  border-width: 0 2px 2px 0;
+  border-bottom-right-radius: var(--radius);
 }
 
 .panel + .panel {
@@ -200,48 +217,48 @@ p {
   gap: 0.4em;
   min-height: 2.5rem;
   padding: 0.4rem 1rem;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius);
   background: transparent;
-  color: var(--chalk);
-  font: 700 0.85rem/1 var(--font-mono);
-  letter-spacing: 0.04em;
+  color: var(--text);
+  font: 600 0.88rem/1 var(--font-label);
   text-decoration: none;
   cursor: pointer;
 }
 
 .btn:hover {
-  background: rgba(233, 238, 247, 0.1);
+  background: var(--surface-hover);
 }
 
 .btn--primary {
-  background: var(--brass);
-  border-color: var(--brass);
-  color: var(--brass-ink);
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
 }
 
 .btn--primary:hover {
-  background: #e4c255;
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 .btn--small {
   min-height: 2rem;
-  padding: 0.25rem 0.7rem;
-  font-size: 0.78rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
 }
 
 .tier {
   display: inline-block;
-  padding: 0.1rem 0.5rem;
+  padding: 0.1rem 0.55rem;
   border: 1px solid currentColor;
   border-radius: 999px;
-  font: 700 0.7rem/1.4 var(--font-mono);
+  font: 600 0.7rem/1.5 var(--font-label);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .tier--none {
-  color: var(--chalk-dim);
+  color: var(--text-dim);
 }
 
 .tier--early {
@@ -262,14 +279,14 @@ p {
   align-items: center;
   gap: 0.75rem;
   padding: 1rem;
-  border: 1px dashed var(--line);
+  border: 1px dashed var(--border-strong);
   border-radius: var(--radius);
 }
 
 .spoiler p {
   flex: 1 1 14rem;
   margin: 0;
-  color: var(--chalk-dim);
+  color: var(--text-dim);
 }
 
 .spoiler--open {
@@ -282,8 +299,8 @@ p {
   margin: -0.4rem -0.4rem 0.5rem 0.5rem;
   border: 0;
   background: none;
-  color: var(--chalk-dim);
-  font: 0.8rem var(--font-mono);
+  color: var(--text-dim);
+  font: 0.8rem var(--font-label);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -311,8 +328,8 @@ p {
 }
 
 .hero p {
-  font-size: 1.15rem;
-  color: var(--chalk-dim);
+  font-size: 1.12rem;
+  color: var(--text-dim);
 }
 
 .tool-list {
@@ -332,8 +349,8 @@ p {
 }
 
 a.tool-card:hover {
-  border-color: var(--line-strong);
-  background: rgba(33, 73, 127, 0.8);
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
 }
 
 .tool-card h2 {
@@ -343,29 +360,27 @@ a.tool-card:hover {
 
 .tool-card p {
   margin: 0;
-  color: var(--chalk-dim);
+  color: var(--text-dim);
 }
 
 .tool-card__kind {
   margin-right: 0.5rem;
-  font: 700 0.72rem var(--font-mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--chalk-dim);
+  color: var(--text-dim);
 }
 
 .tool-card--soon {
-  border: 1px dashed var(--line);
+  border: 1px dashed var(--border-strong);
   border-radius: var(--radius);
   padding: 1.25rem;
-  opacity: 0.75;
+  opacity: 0.8;
 }
 
 .tool-head {
   max-width: 48rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
 }
 
 .tool-head p {
-  color: var(--chalk-dim);
+  color: var(--text-dim);
+  font-size: 1.05rem;
 }
