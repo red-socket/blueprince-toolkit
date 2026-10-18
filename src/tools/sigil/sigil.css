@@ -1,0 +1,303 @@
+.sigil__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.sigil__preview {
+  position: sticky;
+  top: 1rem;
+}
+
+@media (max-width: 860px) {
+  .sigil__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sigil__preview {
+    position: static;
+  }
+}
+
+/* ---- preview ---- */
+
+.stage {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  padding: 6%;
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+
+.stage--flag {
+  aspect-ratio: 3 / 2;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Checkerboard behind a transparent picture, light or dark depending on the ink. */
+.stage--transparent {
+  background-color: #f6f1e4;
+  background-image:
+    linear-gradient(45deg, #e6dcc4 25%, transparent 25%, transparent 75%, #e6dcc4 75%),
+    linear-gradient(45deg, #e6dcc4 25%, transparent 25%, transparent 75%, #e6dcc4 75%);
+  background-size: 20px 20px;
+  background-position:
+    0 0,
+    10px 10px;
+}
+
+.stage--transparent.stage--dark {
+  background-color: #2a2f3a;
+  background-image:
+    linear-gradient(45deg, #343a47 25%, transparent 25%, transparent 75%, #343a47 75%),
+    linear-gradient(45deg, #343a47 25%, transparent 25%, transparent 75%, #343a47 75%);
+}
+
+.stage svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+
+.reading {
+  margin: 1rem 0 0;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.98rem;
+}
+
+.reading div {
+  display: grid;
+  grid-template-columns: 8.5rem 1fr;
+  gap: 0.75rem;
+}
+
+.reading dt {
+  font: 700 0.72rem/1.9 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--chalk-dim);
+}
+
+.reading dd {
+  margin: 0;
+}
+
+.reading em {
+  color: var(--brass);
+}
+
+.export {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 0.6rem;
+}
+
+.export__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.export__size select,
+.field select {
+  min-height: 2.5rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bp-deep);
+  color: var(--chalk);
+  font: 0.85rem var(--font-mono);
+}
+
+.export__status {
+  font: 0.85rem var(--font-mono);
+  color: var(--brass);
+}
+
+/* ---- pickers ---- */
+
+.panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.panel__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.picker {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.picker + .picker {
+  margin-top: 1.25rem;
+}
+
+.picker legend {
+  padding: 0;
+  margin-bottom: 0.5rem;
+  font: 700 0.78rem var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.picker__hint {
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--chalk-dim);
+}
+
+.picker__grid,
+.realms {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.6rem, 1fr));
+  gap: 0.5rem;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+  padding: 0.5rem 0.25rem 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(233, 238, 247, 0.04);
+  color: var(--chalk);
+  cursor: pointer;
+}
+
+.tile:hover {
+  border-color: var(--line-strong);
+  background: rgba(233, 238, 247, 0.1);
+}
+
+.tile[aria-pressed='true'] {
+  border-color: var(--brass);
+  background: rgba(212, 175, 55, 0.16);
+  box-shadow: inset 0 0 0 1px var(--brass);
+}
+
+.tile__icon {
+  display: block;
+  width: 2.6rem;
+  height: 2.6rem;
+}
+
+.tile__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.tile__label {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font: 0.72rem/1.2 var(--font-mono);
+  text-align: center;
+}
+
+.tile--none {
+  color: var(--chalk-dim);
+}
+
+/* ---- style fields ---- */
+
+.field {
+  display: block;
+  margin-top: 1rem;
+}
+
+.field__label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font: 700 0.78rem var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.field__label output {
+  font-weight: 400;
+  color: var(--chalk-dim);
+}
+
+.field__note {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: var(--chalk-dim);
+}
+
+.segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.segmented button {
+  min-height: 2.25rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--chalk);
+  font: 0.8rem var(--font-mono);
+  cursor: pointer;
+}
+
+.segmented button:hover {
+  border-color: var(--line-strong);
+}
+
+.segmented button[aria-checked='true'] {
+  border-color: var(--brass);
+  background: var(--brass);
+  color: var(--brass-ink);
+  font-weight: 700;
+}
+
+.segmented input[type='color'] {
+  width: 2.5rem;
+  height: 2.25rem;
+  padding: 2px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  cursor: pointer;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+
+.check input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--brass);
+}
+
+input[type='range'] {
+  width: 100%;
+  accent-color: var(--brass);
+}

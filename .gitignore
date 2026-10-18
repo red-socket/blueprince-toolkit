@@ -1,0 +1,18 @@
+# Dependencies / build output
+node_modules/
+dist/
+
+# Python
+__pycache__/
+*.pyc
+
+# Editors / OS
+.vs/
+.idea/
+.DS_Store
+
+# Private dev notes and extracted game data, never published
+notes/
+
+# Local agent config
+.claude/

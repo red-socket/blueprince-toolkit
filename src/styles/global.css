@@ -1,0 +1,371 @@
+/* Blueprint look: drafting-paper blue with a faint grid, chalk-white linework, brass accents. */
+:root {
+  --bp-deep: #132c52;
+  --bp: #1b3d6e;
+  --bp-raised: #21497f;
+  --grid: rgba(233, 238, 247, 0.06);
+  --grid-major: rgba(233, 238, 247, 0.11);
+  --chalk: #e9eef7;
+  --chalk-dim: #b4c3dc;
+  --line: rgba(233, 238, 247, 0.35);
+  --line-strong: rgba(233, 238, 247, 0.7);
+  --brass: #d4af37;
+  --brass-ink: #1f1a08;
+  --paper: #efe7d4;
+  --ink: #1b1b1b;
+  --tier-early: #6fbf8e;
+  --tier-mid: #e0a54a;
+  --tier-late: #e0675c;
+  --radius: 4px;
+  --font-display: 'Cinzel', 'Times New Roman', serif;
+  --font-body: 'EB Garamond', Georgia, serif;
+  --font-mono: 'Courier Prime', 'Courier New', monospace;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bp);
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  color: var(--chalk);
+  font: 18px/1.5 var(--font-body);
+}
+
+#app {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--brass);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+}
+
+h2 {
+  font-size: 1.15rem;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---- frame ---- */
+
+.site-header {
+  border-bottom: 1px solid var(--line);
+  background: rgba(19, 44, 82, 0.85);
+  padding: 0.75rem 16px;
+}
+
+.site-header__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--chalk);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+}
+
+.site-header__mark {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--chalk);
+  border-radius: 50%;
+  position: relative;
+}
+
+.site-header__mark::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  background: var(--brass);
+}
+
+.site-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 16px 3rem;
+}
+
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 1rem 16px;
+  font-size: 0.85rem;
+  color: var(--chalk-dim);
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+/* ---- shared pieces ---- */
+
+/* A drafted panel: thin chalk outline with corner ticks. */
+.panel {
+  position: relative;
+  background: rgba(19, 44, 82, 0.72);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.panel::before,
+.panel::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--line-strong);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.panel::before {
+  top: -4px;
+  left: -4px;
+  border-width: 1px 0 0 1px;
+}
+
+.panel::after {
+  bottom: -4px;
+  right: -4px;
+  border-width: 0 1px 1px 0;
+}
+
+.panel + .panel {
+  margin-top: 1.25rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  min-height: 2.5rem;
+  padding: 0.4rem 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--chalk);
+  font: 700 0.85rem/1 var(--font-mono);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: rgba(233, 238, 247, 0.1);
+}
+
+.btn--primary {
+  background: var(--brass);
+  border-color: var(--brass);
+  color: var(--brass-ink);
+}
+
+.btn--primary:hover {
+  background: #e4c255;
+}
+
+.btn--small {
+  min-height: 2rem;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.78rem;
+}
+
+.tier {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font: 700 0.7rem/1.4 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tier--none {
+  color: var(--chalk-dim);
+}
+
+.tier--early {
+  color: var(--tier-early);
+}
+
+.tier--mid {
+  color: var(--tier-mid);
+}
+
+.tier--late {
+  color: var(--tier-late);
+}
+
+.spoiler {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+}
+
+.spoiler p {
+  flex: 1 1 14rem;
+  margin: 0;
+  color: var(--chalk-dim);
+}
+
+.spoiler--open {
+  display: block;
+  border-style: solid;
+}
+
+.spoiler__hide {
+  float: right;
+  margin: -0.4rem -0.4rem 0.5rem 0.5rem;
+  border: 0;
+  background: none;
+  color: var(--chalk-dim);
+  font: 0.8rem var(--font-mono);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.gate {
+  max-width: 40rem;
+  margin: 2rem auto;
+}
+
+.gate h1 {
+  margin-top: 0.75rem;
+}
+
+.gate__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* ---- home ---- */
+
+.hero {
+  max-width: 44rem;
+  margin-bottom: 2rem;
+}
+
+.hero p {
+  font-size: 1.15rem;
+  color: var(--chalk-dim);
+}
+
+.tool-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: 1.25rem;
+}
+
+.tool-card {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+a.tool-card:hover {
+  border-color: var(--line-strong);
+  background: rgba(33, 73, 127, 0.8);
+}
+
+.tool-card h2 {
+  margin-top: 0.75rem;
+  font-size: 1.35rem;
+}
+
+.tool-card p {
+  margin: 0;
+  color: var(--chalk-dim);
+}
+
+.tool-card__kind {
+  margin-right: 0.5rem;
+  font: 700 0.72rem var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--chalk-dim);
+}
+
+.tool-card--soon {
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  opacity: 0.75;
+}
+
+.tool-head {
+  max-width: 48rem;
+  margin-bottom: 1.5rem;
+}
+
+.tool-head p {
+  color: var(--chalk-dim);
+}
