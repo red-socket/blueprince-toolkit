@@ -1,4 +1,9 @@
-import type { BuiltSvg } from './render';
+/** An SVG document and its size in user units (used for the aspect ratio of PNG exports). */
+export interface BuiltSvg {
+  svg: string;
+  width: number;
+  height: number;
+}
 
 function download(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);

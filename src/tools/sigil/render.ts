@@ -4,6 +4,7 @@
 // core (r < CORE_R), rays (RAY_START..BAND_IN), motes on a ring at MOTE_R, border band BAND_IN..BAND_OUT.
 
 import { BORDERS, CORES, SOCIETIES, TRAVELS, WEATHERS, type BorderPattern, type WeatherId } from './data';
+import type { BuiltSvg } from '../../lib/export';
 import { CORE_PATHS, MOTE_PATHS } from './paths.generated';
 
 export interface SigilSpec {
@@ -208,11 +209,6 @@ function sigilGroup(spec: SigilSpec, style: SigilStyle, ink = style.ink): string
   return s;
 }
 
-export interface BuiltSvg {
-  svg: string;
-  width: number;
-  height: number;
-}
 
 function wrap(viewBox: [number, number, number, number], body: string, bg: string | null, title: string): BuiltSvg {
   const [x, y, w, h] = viewBox;

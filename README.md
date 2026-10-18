@@ -10,6 +10,18 @@ Blue Prince is a game about discovery, so the toolkit hides anything that could 
 
 ## Tools
 
+### House Planner *(early game)*
+
+Lay out a day's house on the 5 × 9 grid, with the Entrance Hall and Antechamber in place.
+
+- Pick a room from the list (search, or filter by colour and shape) and click a square. The room turns to fit its neighbours; turn it with the buttons or R, move it by clicking an empty square, remove it with Delete.
+- Each room shows its doors, colours and gem cost. Open doors, doors into a wall and rooms cut off from the Entrance Hall are marked.
+- Totals: rooms drafted, gems spent, dead ends, open doors, rooms per colour, and whether the Antechamber is reached.
+- Rooms that join the house later in the game are hidden behind two switches.
+- The plan is saved in your browser and in the page link. Export it as a PNG or SVG.
+
+The room list holds only facts from the game: names, gem costs, rarities, colours and door shapes.
+
 ### Darts Calculator *(early game)*
 
 Copy the Billiard Room dartboard and the calculator writes it out as an equation, read left to right, in the colours of the sections.

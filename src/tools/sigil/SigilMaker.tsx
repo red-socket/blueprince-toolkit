@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { ToolGate } from '../../components/Spoiler';
 import { BORDERS, CORES, SOCIETIES, TRAVELS, WEATHERS } from './data';
-import { copyPng, downloadPng, downloadSvg } from './export';
+import { copyPng, downloadPng, downloadSvg } from '../../lib/export';
 import {
   borderIcon,
   buildSvg,

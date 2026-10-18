@@ -1,6 +1,7 @@
 import type { FunctionComponent } from 'preact';
 import type { Tier } from '../spoilers';
 import { DartsSolver } from './darts/DartsSolver';
+import { Planner } from './planner/Planner';
 import { SigilMaker } from './sigil/SigilMaker';
 
 export interface Tool {
@@ -14,6 +15,14 @@ export interface Tool {
 }
 
 export const TOOLS: Tool[] = [
+  {
+    id: 'planner',
+    title: 'House Planner',
+    kind: 'Tracker',
+    blurb: "Lay out a day's house on the 5 × 9 grid, with gem costs, room colours and door checks. Export the plan as an image.",
+    tier: 'early',
+    component: Planner,
+  },
   {
     id: 'darts',
     title: 'Darts Calculator',
