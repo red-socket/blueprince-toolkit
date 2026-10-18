@@ -134,19 +134,10 @@ p {
 
 
 
-.site-header__mark {
-  width: 22px;
-  height: 22px;
-  border: 2px solid currentColor;
-  border-radius: 50%;
-  position: relative;
-}
-
-.site-header__mark::after {
-  content: '';
-  position: absolute;
-  inset: 5px;
-  background: #d4af37;
+.site-header__logo {
+  display: block;
+  width: 30px;
+  height: 30px;
 }
 
 .site-main {

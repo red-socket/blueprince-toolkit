@@ -1,5 +1,6 @@
 import type { FunctionComponent } from 'preact';
 import type { Tier } from '../spoilers';
+import { DartsSolver } from './darts/DartsSolver';
 import { SigilMaker } from './sigil/SigilMaker';
 
 export interface Tool {
@@ -13,6 +14,14 @@ export interface Tool {
 }
 
 export const TOOLS: Tool[] = [
+  {
+    id: 'darts',
+    title: 'Darts Calculator',
+    kind: 'Solver',
+    blurb: 'Copy the Billiard Room dartboard and get it written out as an equation, with the working and answer behind a click.',
+    tier: 'early',
+    component: DartsSolver,
+  },
   {
     id: 'sigil',
     title: 'Sigil Maker',

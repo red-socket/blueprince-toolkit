@@ -1,3 +1,5 @@
+<img src="public/favicon.svg" alt="" width="72" height="72">
+
 # Blue Prince Toolkit
 
 A web toolkit for **Blue Prince**: puzzle helpers, references and asset generators.
@@ -7,6 +9,18 @@ Blue Prince is a game about discovery, so the toolkit hides anything that could 
 > Unofficial fan project, free and open source, never commercial. Not affiliated with or endorsed by Dogubomb or Raw Fury.
 
 ## Tools
+
+### Darts Calculator *(early game)*
+
+Copy the Billiard Room dartboard and the calculator writes it out as an equation, read left to right, in the colours of the sections.
+
+- Colour sections with the add, subtract, multiply and divide tools, including the thin "third" strips. Click or drag to paint.
+- Mark numbers on the outer ring: crossed out, two dots (double), slash (half) or diamond (reverse the digits).
+- Set the bullseye's colour and shape, including a smaller shape drawn inside another.
+- The working, ring by ring, and the answer each stay hidden until you click.
+- Random practice boards at three levels, and a link that holds the board.
+
+The solver reproduces the answer of every dartboard stored in the game except two whose data is inconsistent.
 
 ### Sigil Maker *(late game)*
 

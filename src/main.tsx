@@ -65,7 +65,7 @@ function App() {
       <header class="site-header">
         <div class="site-header__inner">
           <a class="site-header__brand" href="#/">
-            <span class="site-header__mark" aria-hidden="true" />
+            <img class="site-header__logo" src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" width="30" height="30" />
             Blue Prince Toolkit
           </a>
         </div>
