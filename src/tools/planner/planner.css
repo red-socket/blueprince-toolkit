@@ -319,3 +319,14 @@
 .issue .linklike:hover {
   text-decoration: underline;
 }
+
+.shape-icon--art {
+  border-radius: 3px;
+  object-fit: cover;
+}
+
+.planner__art {
+  margin: 0;
+  font-size: 0.85rem;
+  gap: 0.35rem;
+}

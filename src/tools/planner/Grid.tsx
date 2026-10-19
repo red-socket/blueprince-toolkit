@@ -12,7 +12,27 @@ import {
   ROOM_BY_NAME,
   type Plan,
 } from './logic';
+import { ROOM_ART } from './art.generated';
 import type { Shape, Side } from './types';
+
+const ART_BASE = `${import.meta.env.BASE_URL}rooms/`;
+
+/** The room's card for a rotation, and how far it still has to be turned (when the game has no card for it). */
+export function artFor(room: string, rot: number, shape: Shape): { href: string; turn: number } | null {
+  const cards = ROOM_ART[room];
+  if (!cards?.length) return null;
+  const any = cards.find((c) => c.rot === null);
+  if (any) return { href: ART_BASE + any.file, turn: 0 };
+  const exact = cards.find((c) => c.rot === rot);
+  if (exact) return { href: ART_BASE + exact.file, turn: 0 };
+  // A straight room looks the same turned half way round.
+  if (shape === 'straight' || shape === 'cross') {
+    const half = cards.find((c) => c.rot === (rot + 2) % 4);
+    if (half) return { href: ART_BASE + half.file, turn: 0 };
+  }
+  const c = cards[0];
+  return { href: ART_BASE + c.file, turn: (rot - (c.rot ?? 0) + 4) % 4 };
+}
 
 export const CELL = 100;
 export const LEFT = 52;
@@ -89,11 +109,13 @@ interface Props {
   reach: Set<number>;
   /** Highlights empty cells while a room is ready to place. */
   placing: boolean;
+  /** Draw the game's room cards instead of the plain tiles. */
+  art: boolean;
   onCell: (i: number) => void;
   interactive?: boolean;
 }
 
-export const Grid = forwardRef<SVGSVGElement, Props>(function Grid({ plan, selected, reach, placing, onCell, interactive = true }, ref) {
+export const Grid = forwardRef<SVGSVGElement, Props>(function Grid({ plan, selected, reach, placing, art, onCell, interactive = true }, ref) {
   const tiles: JSX.Element[] = [];
   for (let r = RANKS; r >= 1; r--) {
     for (let c = 1; c <= COLS; c++) {
@@ -118,6 +140,37 @@ export const Grid = forwardRef<SVGSVGElement, Props>(function Grid({ plan, selec
       const dim = !reach.has(i);
       const bandW = (CELL - 20) / colors.length;
       const nameLines = lines(room.name);
+      const card = art ? artFor(room.name, p.rot, room.shape) : null;
+      const gems =
+        room.cost > 0 ? (
+          <g>
+            {card && <rect x={x + CELL - 26 - (Math.min(room.cost, 5) - 1) * 8} y={y + 13} width={12 + (Math.min(room.cost, 5) - 1) * 8} height="16" rx="8" fill="rgba(10,18,32,0.75)" />}
+            {Array.from({ length: Math.min(room.cost, 5) }, (_, k) => {
+              const gx = x + CELL - 20 - k * 8;
+              const gy = y + 21;
+              return <path key={k} d={`M${gx} ${gy - 4.5}L${gx + 3.5} ${gy}L${gx} ${gy + 4.5}L${gx - 3.5} ${gy}Z`} fill="#7fd1ae" />;
+            })}
+          </g>
+        ) : null;
+      if (card) {
+        tiles.push(
+          <g key={i} data-cell={i} opacity={dim ? 0.55 : 1} {...handlers}>
+            <title>{room.name}</title>
+            <image
+              href={card.href}
+              x={x + 2}
+              y={y + 2}
+              width={CELL - 4}
+              height={CELL - 4}
+              transform={card.turn ? `rotate(${card.turn * 90} ${x + CELL / 2} ${y + CELL / 2})` : undefined}
+            />
+            {doors.map((s) => doorMark(x, y, s, doorState(plan, i, s)))}
+            {gems}
+            {sel && <rect x={x + 2} y={y + 2} width={CELL - 4} height={CELL - 4} rx="3" fill="none" stroke={BRASS} stroke-width="4" />}
+          </g>,
+        );
+        continue;
+      }
       tiles.push(
         <g key={i} data-cell={i} opacity={dim ? 0.55 : 1} {...handlers}>
           <rect x={x + 3} y={y + 3} width={CELL - 6} height={CELL - 6} rx="4" fill={tint(main, isFixed(i) ? 0.22 : 0.3)} stroke={sel ? BRASS : 'none'} stroke-width="3" />
@@ -133,15 +186,7 @@ export const Grid = forwardRef<SVGSVGElement, Props>(function Grid({ plan, selec
               </tspan>
             ))}
           </text>
-          {room.cost > 0 && (
-            <g>
-              {Array.from({ length: Math.min(room.cost, 5) }, (_, k) => {
-                const gx = x + CELL - 20 - k * 8;
-                const gy = y + 21;
-                return <path key={k} d={`M${gx} ${gy - 4.5}L${gx + 3.5} ${gy}L${gx} ${gy + 4.5}L${gx - 3.5} ${gy}Z`} fill="#7fd1ae" />;
-              })}
-            </g>
-          )}
+          {gems}
         </g>,
       );
     }
@@ -162,6 +207,13 @@ export const Grid = forwardRef<SVGSVGElement, Props>(function Grid({ plan, selec
     </svg>
   );
 });
+
+/** The room's card as a small picture, or its shape when there's no card or art is off. */
+export function RoomIcon({ room, shape, color, art }: { room: string; shape: Shape; color: string; art: boolean }) {
+  const card = art ? artFor(room, 0, shape) : null;
+  if (card) return <img class="shape-icon shape-icon--art" src={card.href} alt="" loading="lazy" width="64" height="64" />;
+  return <ShapeIcon shape={shape} color={color} />;
+}
 
 /** Small picture of a shape for the room list. */
 export function ShapeIcon({ shape, color }: { shape: Shape; color: string }) {

@@ -18,6 +18,7 @@ Lay out a day's house on the 5 × 9 grid, with the Entrance Hall and Antechamber
 - Each room shows its doors, colours and gem cost. Open doors, doors into a wall and rooms cut off from the Entrance Hall are marked.
 - Totals: rooms drafted, gems spent, dead ends, open doors, rooms per colour, and whether the Antechamber is reached.
 - Rooms that join the house later in the game are hidden behind two switches.
+- Rooms are drawn with the game's own floor-plan cards (or plain tiles, if you switch the art off).
 - The plan is saved in your browser and in the page link. Export it as a PNG or SVG.
 
 The room list holds only facts from the game: names, gem costs, rarities, colours and door shapes.
@@ -45,7 +46,7 @@ Build a realm sigil from its four parts and export it.
 
 Ink and background colours, the line weight and whether the border band is filled can be changed. Export as SVG or as a PNG from 128 to 4096 px wide, or copy the image. The sigil is stored in the page link, so copying the address shares it.
 
-All the artwork is original. The cores and motes are vector traces of drawings made for this project, and the rays and borders are drawn in code.
+The sigil artwork is original: the cores and motes are vector traces of drawings made for this project, and the rays and borders are drawn in code.
 
 ## Development
 
@@ -75,3 +76,5 @@ This rewrites `src/tools/sigil/paths.generated.ts`.
 Copyright © 2026 Lucas Pospor.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3. See [LICENSE](LICENSE).
+
+The room floor-plan cards in `public/rooms/` are artwork from Blue Prince, © Dogubomb. They are not covered by the GPL and are used here, unmodified apart from resizing, for a free, non-commercial fan tool.

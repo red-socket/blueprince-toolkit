@@ -923,7 +923,7 @@ export const ROOMS: RoomData[] = [
    "Blueprint"
   ],
   "flags": [],
-  "shape": "cross",
+  "shape": "L",
   "tier": "early"
  },
  {

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { ToolGate } from '../../components/Spoiler';
 import { downloadPng, downloadSvg, type BuiltSvg } from '../../lib/export';
 import { TIER_LABEL, useReveal } from '../../spoilers';
-import { Grid, HEIGHT, ShapeIcon, WIDTH } from './Grid';
+import { Grid, HEIGHT, RoomIcon, WIDTH } from './Grid';
 import {
   bestRotation,
   CATEGORY_COLOR,
@@ -70,6 +70,20 @@ function PlannerTool() {
   const [showMid, setShowMid] = useReveal('planner-mid');
   const [showLate, setShowLate] = useReveal('planner-late');
   const [status, setStatus] = useState('');
+  const [art, setArt] = useState(() => {
+    try {
+      return localStorage.getItem('bpt.planner.art') !== 'off';
+    } catch {
+      return true;
+    }
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem('bpt.planner.art', art ? 'on' : 'off');
+    } catch {
+      // Storage blocked: the choice lasts for this page view.
+    }
+  }, [art]);
   const svgRef = useRef<SVGSVGElement>(null);
 
   const code = encodePlan(plan);
@@ -175,13 +189,28 @@ function PlannerTool() {
     return () => window.removeEventListener('keydown', key);
   });
 
-  const exportSvg = (): BuiltSvg | null => {
+  // The exported file embeds the room cards: an SVG drawn as an image can't load other files.
+  const exportSvg = async (): Promise<BuiltSvg | null> => {
     const el = svgRef.current;
     if (!el) return null;
     const clone = el.cloneNode(true) as SVGSVGElement;
     clone.setAttribute('width', String(WIDTH * 2));
     clone.setAttribute('height', String(HEIGHT * 2));
     clone.querySelectorAll('[style]').forEach((n) => n.removeAttribute('style'));
+    const cache = new Map<string, Promise<string>>();
+    const inline = (url: string) => {
+      if (!cache.has(url))
+        cache.set(
+          url,
+          fetch(url)
+            .then((r) => r.blob())
+            .then((b) => new Promise<string>((res) => { const fr = new FileReader(); fr.onload = () => res(fr.result as string); fr.readAsDataURL(b); })),
+        );
+      return cache.get(url)!;
+    };
+    await Promise.all(
+      [...clone.querySelectorAll('image')].map(async (img) => img.setAttribute('href', await inline(img.getAttribute('href')!))),
+    );
     return { svg: new XMLSerializer().serializeToString(clone), width: WIDTH, height: HEIGHT };
   };
 
@@ -200,11 +229,14 @@ function PlannerTool() {
 
       <div class="planner__layout">
         <section class="planner__grid panel" aria-label="House">
-          <Grid ref={svgRef} plan={plan} selected={selected} reach={reach} placing={armed !== null} onCell={onCell} />
+          <Grid ref={svgRef} plan={plan} selected={selected} reach={reach} placing={armed !== null} art={art} onCell={onCell} />
           <p class="planner__legend">
             <span><i class="dot dot--open" /> open door</span>
             <span><i class="dot dot--blocked" /> door into a wall</span>
             <span><i class="gem" /> gem cost</span>
+            <label class="check planner__art">
+              <input type="checkbox" checked={art} onChange={(e) => setArt(e.currentTarget.checked)} /> Room art
+            </label>
             <span>Faded: not connected to the Entrance Hall</span>
           </p>
           <div class="planner__actions">
@@ -220,10 +252,10 @@ function PlannerTool() {
             >
               Clear house
             </button>
-            <button type="button" class="btn btn--small" onClick={() => { const b = exportSvg(); if (b) downloadPng(b, WIDTH * 3, 'house-plan'); }}>
+            <button type="button" class="btn btn--small" onClick={async () => { const b = await exportSvg(); if (b) await downloadPng(b, WIDTH * 3, 'house-plan'); }}>
               Download PNG
             </button>
-            <button type="button" class="btn btn--small" onClick={() => { const b = exportSvg(); if (b) downloadSvg(b, 'house-plan'); }}>
+            <button type="button" class="btn btn--small" onClick={async () => { const b = await exportSvg(); if (b) downloadSvg(b, 'house-plan'); }}>
               Download SVG
             </button>
             <button
@@ -251,7 +283,7 @@ function PlannerTool() {
             {selRoom && selected !== null ? (
               <div class="selected">
                 <div class="selected__head">
-                  <ShapeIcon shape={selRoom.shape} color={CATEGORY_COLOR[selRoom.colors[0]] ?? CATEGORY_COLOR.Blueprint} />
+                  <RoomIcon room={selRoom.name} shape={selRoom.shape} color={CATEGORY_COLOR[selRoom.colors[0]] ?? CATEGORY_COLOR.Blueprint} art={art} />
                   <div>
                     <h2>{selRoom.name}</h2>
                     <p class="selected__where">
@@ -310,7 +342,7 @@ function PlannerTool() {
               {rooms.map((r) => (
                 <li key={r.name}>
                   <button type="button" class="room" aria-pressed={armed === r.name} onClick={() => { setArmed(armed === r.name ? null : r.name); setSelected(null); }}>
-                    <ShapeIcon shape={r.shape} color={CATEGORY_COLOR[r.colors[0]] ?? CATEGORY_COLOR.Blueprint} />
+                    <RoomIcon room={r.name} shape={r.shape} color={CATEGORY_COLOR[r.colors[0]] ?? CATEGORY_COLOR.Blueprint} art={art} />
                     <span class="room__name">{r.name}</span>
                     <span class="room__meta">
                       <Gems n={r.cost} />
