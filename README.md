@@ -23,6 +23,10 @@ Lay out a day's house on the 5 × 9 grid, with the Entrance Hall and Antechamber
 
 The room list holds only facts from the game: names, gem costs, rarities, colours and door shapes.
 
+### Room Card Maker *(no spoilers)*
+
+Design your own room in the style of the game's floor-plan cards: name, colour, doors, gem cost, an icon, effect text with coloured words (`*WORD*`) and inline icons (`{coin}`, `{gem}`, `{key}`, `{steps}`…), and a floor (wood, tiles, carpet, stone, grass, marble, plain, or your own picture). Save it as a PNG up to 2048 px or copy it. The link holds the card, except an uploaded picture, which never leaves your device.
+
 ### Darts Calculator *(early game)*
 
 Copy the Billiard Room dartboard and the calculator writes it out as an equation, read left to right, in the colours of the sections.
@@ -77,4 +81,4 @@ Copyright © 2026 Lucas Pospor.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3. See [LICENSE](LICENSE).
 
-The room floor-plan cards in `public/rooms/` are artwork from Blue Prince, © Dogubomb. They are not covered by the GPL and are used here, unmodified apart from resizing, for a free, non-commercial fan tool.
+The room floor-plan cards in `public/rooms/` and the card icons in `public/card-icons/` are artwork from Blue Prince, © Dogubomb. They are not covered by the GPL and are used here, unmodified apart from resizing, for a free, non-commercial fan tool.

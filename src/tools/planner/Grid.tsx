@@ -148,7 +148,7 @@ export const Grid = forwardRef<SVGSVGElement, Props>(function Grid({ plan, selec
             {Array.from({ length: Math.min(room.cost, 5) }, (_, k) => {
               const gx = x + CELL - 20 - k * 8;
               const gy = y + 21;
-              return <path key={k} d={`M${gx} ${gy - 4.5}L${gx + 3.5} ${gy}L${gx} ${gy + 4.5}L${gx - 3.5} ${gy}Z`} fill="#7fd1ae" />;
+              return <path key={k} d={`M${gx} ${gy - 4.5}L${gx + 3.5} ${gy}L${gx} ${gy + 4.5}L${gx - 3.5} ${gy}Z`} fill="#f2a7c9" />;
             })}
           </g>
         ) : null;

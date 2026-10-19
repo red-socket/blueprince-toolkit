@@ -1,0 +1,117 @@
+.cards__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.cards__preview {
+  position: sticky;
+  top: 1rem;
+}
+
+@media (max-width: 900px) {
+  .cards__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cards__preview {
+    position: static;
+  }
+}
+
+.card-canvas {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  margin: 0 auto;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+.input {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--input-bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 4.5rem;
+}
+
+.swatch-dot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-right: 0.15rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  vertical-align: -1px;
+}
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(2.9rem, 1fr));
+  gap: 0.4rem;
+}
+
+.icon-grid--small {
+  grid-template-columns: repeat(6, 2.6rem);
+  margin-top: 0.4rem;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  padding: 0.3rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #11151c;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  border-color: var(--border-strong);
+}
+
+.icon-btn[aria-pressed='true'] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.icon-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.icon-btn__none {
+  font: 500 0.7rem var(--font-label);
+  color: var(--text-dim);
+}
+
+.field__note code {
+  padding: 0 0.25rem;
+  border-radius: 3px;
+  background: var(--input-bg);
+  font-size: 0.85em;
+}
+
+.file {
+  max-width: 100%;
+  color: var(--text-dim);
+  font: 0.88rem var(--font-label);
+}
+
+.cards .panel h2 {
+  margin-bottom: 0.25rem;
+}

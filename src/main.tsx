@@ -75,7 +75,7 @@ function App() {
       </main>
       <footer class="site-footer">
         <p>
-          Unofficial fan project, free and open source. Not affiliated with or endorsed by Dogubomb or Raw Fury. Room art © Dogubomb.{' '}
+          Unofficial fan project, free and open source. Not affiliated with or endorsed by Dogubomb or Raw Fury. Room art and icons © Dogubomb.{' '}
           <a href="https://github.com/red-socket/blueprince-toolkit">Source</a>
         </p>
       </footer>

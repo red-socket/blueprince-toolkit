@@ -1,5 +1,6 @@
 import type { FunctionComponent } from 'preact';
 import type { Tier } from '../spoilers';
+import { CardMaker } from './cards/CardMaker';
 import { DartsSolver } from './darts/DartsSolver';
 import { Planner } from './planner/Planner';
 import { SigilMaker } from './sigil/SigilMaker';
@@ -22,6 +23,14 @@ export const TOOLS: Tool[] = [
     blurb: "Lay out a day's house on the 5 × 9 grid, with gem costs, room colours and door checks. Export the plan as an image.",
     tier: 'early',
     component: Planner,
+  },
+  {
+    id: 'cards',
+    title: 'Room Card Maker',
+    kind: 'Generator',
+    blurb: "Design your own room in the style of the estate's floor-plan cards and save it as a picture.",
+    tier: 'none',
+    component: CardMaker,
   },
   {
     id: 'darts',
