@@ -87,5 +87,22 @@
       "description": "Make an icon or a flag from an emblem in Blue Prince, in any colours and shapes, and export it as an SVG or PNG. The tool's contents stay hidden until you choose to open it.",
       "intro": "Put an emblem on an icon or a flag, in any colours, and export it as an SVG or PNG."
     }
+  ],
+  "groups": [
+    {
+      "kind": "Solver",
+      "title": "Stuck on a puzzle?",
+      "text": "Copy what you see in the game and get a hint or the answer. Answers stay hidden until you ask."
+    },
+    {
+      "kind": "Tracker",
+      "title": "Plan and track a run",
+      "text": "Lay out a day's house, or keep count of steps and items while you play."
+    },
+    {
+      "kind": "Generator",
+      "title": "Make your own",
+      "text": "Create room cards, letters, sigils and flags in the game's style and save them as pictures."
+    }
   ]
 }

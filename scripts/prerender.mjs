@@ -11,7 +11,8 @@ const pages = JSON.parse(readFileSync(join(root, 'src/site/pages.json'), 'utf8')
 const SITE = (process.env.SITE_URL || pages.site.url).replace(/\/?$/, '/');
 const BASE = (process.env.BASE_PATH || new URL(SITE).pathname).replace(/\/?$/, '/');
 const template = readFileSync(join(dist, 'index.html'), 'utf8');
-const TIER = { early: 'Early game', mid: 'Mid game', late: 'Late game' };
+const TIER = { none: 'No spoilers', early: 'Early game', mid: 'Mid game', late: 'Late game' };
+const TIER_ORDER = Object.keys(TIER);
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -58,14 +59,15 @@ function write(rel, html) {
   writeFileSync(file, html);
 }
 
-// Home
-const list = pages.tools
-  .map(
-    (t) =>
-      `<li><a class="tool-card panel" href="${BASE}${t.id}/"><span class="tool-card__kind label">${esc(t.kind)}</span>` +
-      (TIER[t.tier] ? `<span class="tier tier--${t.tier}">${TIER[t.tier]}</span>` : '<span class="tier tier--none">No spoilers</span>') +
-      `<h2>${esc(t.title)}</h2><p>${esc(t.blurb)}</p></a></li>`,
-  )
+// Home: the same sections as the app's home page.
+const card = (t) =>
+  `<li><a class="tool-card panel" href="${BASE}${t.id}/"><h3>${esc(t.title)}</h3><p>${esc(t.blurb)}</p>` +
+  `<span class="tool-card__foot"><span class="tier tier--${t.tier}">${TIER[t.tier]}</span><span class="tool-card__open">Open →</span></span></a></li>`;
+const groups = pages.groups
+  .map((g) => {
+    const tools = pages.tools.filter((t) => t.kind === g.kind).sort((a, b) => TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier));
+    return `<section class="tool-group"><h2>${esc(g.title)}</h2><p class="tool-group__text">${esc(g.text)}</p><ul class="tool-list">${tools.map(card).join('')}</ul></section>`;
+  })
   .join('');
 write(
   'index.html',
@@ -75,7 +77,7 @@ write(
     url: SITE,
     image: `${SITE}og/home.png`,
     alt: 'Blue Prince Toolkit logo: a room tile with a crown',
-    body: `<section class="hero"><h1>${esc(pages.site.name)}</h1><p>${esc(pages.site.intro)}</p></section><ul class="tool-list">${list}</ul>`,
+    body: `<section class="hero"><h1 class="hero__title">${esc(pages.site.name)}</h1><p>${esc(pages.site.intro)}</p></section>${groups}`,
   }),
 );
 

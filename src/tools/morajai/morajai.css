@@ -231,5 +231,5 @@
 
 .mj .rules summary {
   cursor: pointer;
-  font: 600 1.05rem var(--font-display);
+  font: 600 1.05rem var(--font-body);
 }

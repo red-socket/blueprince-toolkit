@@ -44,3 +44,11 @@ export const TOOLS: Tool[] = pages.tools.map((t) => ({
 }));
 
 export const SITE = pages.site;
+
+const TIER_ORDER: Tier[] = ['none', 'early', 'mid', 'late'];
+
+/** Home page sections: tools of one kind, least spoilery first. */
+export const GROUPS = pages.groups.map((g) => ({
+  ...g,
+  tools: TOOLS.filter((t) => t.kind === g.kind).sort((a, b) => TIER_ORDER.indexOf(a.tier) - TIER_ORDER.indexOf(b.tier)),
+}));

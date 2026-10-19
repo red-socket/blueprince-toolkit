@@ -12,7 +12,7 @@
 }
 
 .tracker__day b {
-  font: 600 1.8rem var(--font-display);
+  font: 600 1.8rem var(--font-body);
 }
 
 .tracker__day .label {

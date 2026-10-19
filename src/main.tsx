@@ -6,34 +6,40 @@ import '@fontsource-variable/inter';
 import './styles/global.css';
 import { currentRoute, interceptLinks, onNavigate, pathFor, redirectHashLink } from './lib/route';
 import { TIER_LABEL } from './spoilers';
-import { SITE, TOOLS } from './tools/registry';
+import { GROUPS, SITE, TOOLS } from './tools/registry';
 
 function Home() {
   return (
     <>
       <section class="hero">
-        <h1>Blue Prince Toolkit</h1>
+        <h1 class="hero__title">Blue Prince Toolkit</h1>
         <p>{SITE.intro}</p>
+        <p class="hero__legend">
+          Spoiler levels: <span class="tier tier--none">{TIER_LABEL.none}</span>{' '}
+          <span class="tier tier--early">{TIER_LABEL.early}</span> <span class="tier tier--mid">{TIER_LABEL.mid}</span>{' '}
+          <span class="tier tier--late">{TIER_LABEL.late}</span>
+        </p>
       </section>
-      <ul class="tool-list">
-        {TOOLS.map((t) => (
-          <li key={t.id}>
-            <a class="tool-card panel" href={pathFor(t.id)}>
-              <span class="tool-card__kind label">{t.kind}</span>
-              <span class={`tier tier--${t.tier}`}>{TIER_LABEL[t.tier]}</span>
-              <h2>{t.title}</h2>
-              <p>{t.blurb}</p>
-            </a>
-          </li>
-        ))}
-        <li>
-          <div class="tool-card tool-card--soon">
-            <span class="tool-card__kind label">Coming next</span>
-            <h2>More tools</h2>
-            <p>Puzzle helpers, a house planner and more generators are on the way.</p>
-          </div>
-        </li>
-      </ul>
+      {GROUPS.map((g) => (
+        <section class="tool-group" key={g.kind}>
+          <h2>{g.title}</h2>
+          <p class="tool-group__text">{g.text}</p>
+          <ul class="tool-list">
+            {g.tools.map((t) => (
+              <li key={t.id}>
+                <a class="tool-card panel" href={pathFor(t.id)}>
+                  <h3>{t.title}</h3>
+                  <p>{t.blurb}</p>
+                  <span class="tool-card__foot">
+                    <span class={`tier tier--${t.tier}`}>{TIER_LABEL[t.tier]}</span>
+                    <span class="tool-card__open">Open →</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
     </>
   );
 }

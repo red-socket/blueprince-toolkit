@@ -212,7 +212,7 @@
 
 .parlor .rules summary {
   cursor: pointer;
-  font: 600 1rem var(--font-display);
+  font: 600 1rem var(--font-body);
 }
 
 .parlor .rules ul {

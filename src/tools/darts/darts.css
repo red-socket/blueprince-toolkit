@@ -267,14 +267,13 @@
 
 .answer {
   margin: 0;
-  font: 700 3rem/1 var(--font-display);
+  font: 700 3rem/1 var(--font-body);
   color: var(--accent);
 }
 
 .rules summary {
   cursor: pointer;
-  font: 600 1.05rem var(--font-display);
-  letter-spacing: var(--display-spacing);
+  font: 600 1.05rem var(--font-body);
 }
 
 .rules ul {
