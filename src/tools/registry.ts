@@ -3,6 +3,7 @@ import pages from '../site/pages.json';
 import type { Tier } from '../spoilers';
 import { CardMaker } from './cards/CardMaker';
 import { DartsSolver } from './darts/DartsSolver';
+import { FlagMaker } from './flags/FlagMaker';
 import { LetterMaker } from './letters/LetterMaker';
 import { Planner } from './planner/Planner';
 import { SigilMaker } from './sigil/SigilMaker';
@@ -24,6 +25,7 @@ const COMPONENTS: Record<string, FunctionComponent> = {
   letters: LetterMaker,
   darts: DartsSolver,
   sigil: SigilMaker,
+  flags: FlagMaker,
 };
 
 export const TOOLS: Tool[] = pages.tools.map((t) => ({

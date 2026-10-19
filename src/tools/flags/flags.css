@@ -1,0 +1,78 @@
+.flags__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.flags__preview {
+  position: sticky;
+  top: 1rem;
+}
+
+@media (max-width: 860px) {
+  .flags__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .flags__preview {
+    position: static;
+  }
+}
+
+.flags__mode {
+  margin-bottom: 1rem;
+}
+
+/* Checkerboard, so transparent parts of the picture show. */
+.flags__stage {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  padding: 8%;
+  border-radius: calc(var(--radius) - 2px);
+  background-color: #2a2f3a;
+  background-image:
+    linear-gradient(45deg, #323845 25%, transparent 25%, transparent 75%, #323845 75%),
+    linear-gradient(45deg, #323845 25%, transparent 25%, transparent 75%, #323845 75%);
+  background-size: 20px 20px;
+  background-position:
+    0 0,
+    10px 10px;
+}
+
+.flags__stage--icon {
+  aspect-ratio: 1;
+  padding: 18%;
+}
+
+.flags__stage svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+}
+
+.color-chip {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  padding: 0 !important;
+}
+
+.color-chip i {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.color-chip[aria-checked='true'] {
+  background: var(--accent-soft) !important;
+}
+
+.realm-swatch {
+  padding: 0.35rem;
+  border-radius: 4px;
+  color: #fff;
+}

@@ -43,6 +43,10 @@ Copy the Billiard Room dartboard and the calculator writes it out as an equation
 
 The solver reproduces the answer of every dartboard stored in the game except two whose data is inconsistent.
 
+### Flag & Icon Maker *(late game)*
+
+Put one of the eight realm cores on an icon (no background, circle, rounded square, square, shield or diamond) or on a flag (rectangle in four proportions, swallowtail, pennant or hanging banner; plain, border, band, halves, tricolour, cross or saltire), filled or outlined, in any colours. Export as SVG or PNG (icons from 16 to 1024 px). Each realm's own flag colours sit behind a second spoiler button.
+
 ### Sigil Maker *(late game)*
 
 Build a realm sigil from its four parts and export it.

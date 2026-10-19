@@ -169,7 +169,25 @@ def art_letters(d, cx, cy, r):
         d.line([(start, y), (end, y)], fill=(60, 55, 70), width=3 * S)
 
 
-ART = {'letters': art_letters, 'home': art_home, 'planner': art_planner, 'darts': art_darts, 'cards': art_cards, 'sigil': art_sigil}
+def art_flags(d, cx, cy, r):
+    # A pole with a flag and a small icon tile, carrying the toolkit's crown rather than any real emblem.
+    pole_x = cx - r * 0.95
+    d.rounded_rectangle([pole_x - 5 * S, cy - r * 0.95, pole_x + 5 * S, cy + r], radius=4 * S, fill=(150, 160, 180))
+    d.ellipse([pole_x - 11 * S, cy - r * 0.95 - 16 * S, pole_x + 11 * S, cy - r * 0.95 + 6 * S], fill=BRASS)
+    fw, fh = r * 1.75, r * 1.15
+    fx, fy = pole_x + 5 * S, cy - r * 0.9
+    d.rectangle([fx, fy, fx + fw, fy + fh], fill=(107, 76, 138))
+    d.rectangle([fx, fy + fh * 0.38, fx + fw, fy + fh * 0.62], fill=BRASS)
+    k = r * 0.5 / 64
+    ox, oy = fx + fw / 2 - 32 * k, fy + fh / 2 - 34 * k
+    P = lambda px, py: (ox + px * k, oy + py * k)
+    d.polygon([P(20.5, 41), P(20.5, 27.5), P(26.5, 33), P(32, 24), P(37.5, 33), P(43.5, 27.5), P(43.5, 41)], fill=(255, 255, 255))
+    for ccx, ccy in [(20.5, 25.6), (32, 21.6), (43.5, 25.6)]:
+        d.ellipse([P(ccx - 2.6, ccy - 2.6), P(ccx + 2.6, ccy + 2.6)], fill=(255, 255, 255))
+    logo(d, cx + r * 0.35, cy + r * 0.38, r * 0.62)
+
+
+ART = {'flags': art_flags, 'letters': art_letters, 'home': art_home, 'planner': art_planner, 'darts': art_darts, 'cards': art_cards, 'sigil': art_sigil}
 
 
 def draw(name, title, text, tier=None):

@@ -50,6 +50,15 @@
       "blurb": "Build a sigil from its parts and export it as an SVG or PNG.",
       "description": "Build a sigil for Blue Prince from its parts and export it as an SVG or PNG. The tool's contents stay hidden until you choose to open it.",
       "intro": "Build a sigil from its parts and export it as an SVG or PNG."
+    },
+    {
+      "id": "flags",
+      "title": "Flag & Icon Maker",
+      "kind": "Generator",
+      "tier": "late",
+      "blurb": "Put an emblem on an icon or a flag, in any colours, and export it as an SVG or PNG.",
+      "description": "Make an icon or a flag from an emblem in Blue Prince, in any colours and shapes, and export it as an SVG or PNG. The tool's contents stay hidden until you choose to open it.",
+      "intro": "Put an emblem on an icon or a flag, in any colours, and export it as an SVG or PNG."
     }
   ]
 }
