@@ -31,6 +31,14 @@ Design your own room in the style of the game's floor-plan cards: name, colour, 
 
 Write a letter, memo, note or notice on the estate's paper: a drawn double frame, a red letterhead and rule, an ornate first letter, handwriting, typewriter or printed text in five inks, a rubber stamp, hatched edges and worn paper. Save it as a PNG up to 2500 px wide or copy it; the link holds the document.
 
+### Parlor Solver *(early game)*
+
+Copy the statements on the three boxes, choosing each from a set of templates (where the gems are, what other statements or boxes say, counts of true and false statements, and more). The solver tries every combination against the game's rules and tells you which box holds the gems, or that the statements don't settle it. The answer and the reasoning each sit behind a button.
+
+### Mora Jai Solver *(mid game)*
+
+Paint a puzzle box's nine tiles and four corner symbols in any of the ten colours, then play it in the browser or let the solver find the shortest sequence of presses (in a background thread). Get the first press as a hint, then every press with a step-by-step view. The tile rules follow the in-game book and agree with joric's open-source solver.
+
 ### Darts Calculator *(early game)*
 
 Copy the Billiard Room dartboard and the calculator writes it out as an equation, read left to right, in the colours of the sections.

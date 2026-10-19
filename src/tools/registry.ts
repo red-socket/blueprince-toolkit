@@ -5,6 +5,8 @@ import { CardMaker } from './cards/CardMaker';
 import { DartsSolver } from './darts/DartsSolver';
 import { FlagMaker } from './flags/FlagMaker';
 import { LetterMaker } from './letters/LetterMaker';
+import { MoraJai } from './morajai/MoraJai';
+import { Parlor } from './parlor/Parlor';
 import { Planner } from './planner/Planner';
 import { SigilMaker } from './sigil/SigilMaker';
 
@@ -24,6 +26,8 @@ const COMPONENTS: Record<string, FunctionComponent> = {
   cards: CardMaker,
   letters: LetterMaker,
   darts: DartsSolver,
+  morajai: MoraJai,
+  parlor: Parlor,
   sigil: SigilMaker,
   flags: FlagMaker,
 };

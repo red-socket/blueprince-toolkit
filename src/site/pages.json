@@ -43,6 +43,24 @@
       "intro": "Copy the dartboard by colouring its sections, and the calculator writes it out as an equation. The working and the answer stay hidden until you ask."
     },
     {
+      "id": "parlor",
+      "title": "Parlor Solver",
+      "kind": "Solver",
+      "tier": "early",
+      "blurb": "Copy the statements on the three boxes and find out which one holds the gems, with the reasoning behind a click.",
+      "description": "A solver for the three-box puzzle in Blue Prince: copy each box's statements and it works out which box holds the gems. The answer and the reasoning stay hidden until you ask.",
+      "intro": "Copy the statements from the three boxes. The solver works out which box holds the gems; the answer and the reasoning stay hidden until you ask."
+    },
+    {
+      "id": "morajai",
+      "title": "Mora Jai Solver",
+      "kind": "Solver",
+      "tier": "mid",
+      "blurb": "Copy a Mora Jai puzzle box, play it here, or get the shortest solution one press at a time.",
+      "description": "A solver for the Mora Jai puzzle boxes in Blue Prince. Paint the tiles and corner symbols, play the box in your browser, or find the shortest solution, with a hint before the full answer.",
+      "intro": "Paint a puzzle box's tiles and corner symbols, then play it here or let the solver find the shortest way to open it."
+    },
+    {
       "id": "sigil",
       "title": "Sigil Maker",
       "kind": "Generator",

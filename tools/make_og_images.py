@@ -187,7 +187,35 @@ def art_flags(d, cx, cy, r):
     logo(d, cx + r * 0.35, cy + r * 0.38, r * 0.62)
 
 
-ART = {'flags': art_flags, 'letters': art_letters, 'home': art_home, 'planner': art_planner, 'darts': art_darts, 'cards': art_cards, 'sigil': art_sigil}
+def art_parlor(d, cx, cy, r):
+    # Three closed boxes on a table: blue, white and black. Their lids stay blank.
+    w = r * 0.62
+    for k, (fill, edge) in enumerate([((61, 127, 216), (30, 70, 130)), ((236, 232, 222), (150, 140, 120)), ((22, 22, 26), (90, 90, 100))]):
+        x = cx - r * 1.05 + k * r * 0.72
+        y = cy - w * 0.1
+        d.rectangle([x, y, x + w, y + w * 0.75], fill=fill, outline=edge, width=3 * S)
+        d.polygon([(x - 6 * S, y), (x + w + 6 * S, y), (x + w - 4 * S, y - w * 0.28), (x + 4 * S, y - w * 0.28)], fill=fill, outline=edge)
+        d.rectangle([x + w * 0.42, y + w * 0.1, x + w * 0.58, y + w * 0.3], fill=BRASS)
+    d.line([(cx - r * 1.2, cy + w * 0.68), (cx + r * 1.2, cy + w * 0.68)], fill=(150, 120, 80), width=6 * S)
+
+
+def art_morajai(d, cx, cy, r):
+    # A wooden puzzle box lid with a 3x3 grid of coloured tiles and a symbol in each corner.
+    d.rounded_rectangle([cx - r, cy - r, cx + r, cy + r], radius=r * 0.12, fill=(92, 62, 38), outline=(50, 32, 20), width=4 * S)
+    colors = [(241, 239, 233), (127, 128, 131), (200, 48, 44), (61, 127, 216), (241, 239, 233), (240, 207, 58), (127, 128, 131), (124, 80, 184), (241, 239, 233)]
+    t = r * 0.46
+    g = r * 0.1
+    for i, c in enumerate(colors):
+        x = cx - 1.5 * t - g + (i % 3) * (t + g)
+        y = cy - 1.5 * t - g + (i // 3) * (t + g)
+        d.rounded_rectangle([x, y, x + t, y + t], radius=t * 0.12, fill=c)
+    for (sx, sy) in [(-1, -1), (1, -1), (-1, 1), (1, 1)]:
+        px, py = cx + sx * r * 0.86, cy + sy * r * 0.86
+        q = r * 0.07
+        d.polygon([(px, py - q), (px + q, py), (px, py + q), (px - q, py)], fill=(241, 239, 233), outline=(30, 20, 10))
+
+
+ART = {'parlor': art_parlor, 'morajai': art_morajai, 'flags': art_flags, 'letters': art_letters, 'home': art_home, 'planner': art_planner, 'darts': art_darts, 'cards': art_cards, 'sigil': art_sigil}
 
 
 def draw(name, title, text, tier=None):
