@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite';
 import preact from '@preact/preset-vite';
 
+declare const process: { env: Record<string, string | undefined> };
+
 export default defineConfig({
-  // Relative asset paths, so the build works from any folder (e.g. GitHub Pages under /blueprince-toolkit/).
-  base: './',
+  // GitHub Pages serves the site from /blueprince-toolkit/. Set BASE_PATH=/ for a custom domain.
+  base: process.env.BASE_PATH ?? '/blueprince-toolkit/',
   plugins: [preact()],
 });

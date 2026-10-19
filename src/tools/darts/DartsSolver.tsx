@@ -1,6 +1,7 @@
 import type { ComponentChildren, JSX } from 'preact';
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { ToolGate } from '../../components/Spoiler';
+import { onNavigate, query, setQuery } from '../../lib/route';
 import { DartBoard, GROUP_COLOR, OP_SIGN, shapeGlyph, type Target } from './Board';
 import {
   bullSteps,
@@ -57,10 +58,10 @@ const SHAPE_MEANING: Record<Shape, string> = {
 const GROUP_NAME: Record<Group, string> = { add: 'blue (add)', sub: 'yellow (subtract)', mul: 'pink (multiply)', div: 'violet (divide)' };
 const isMark = (t: Tool): t is Mark => t === 'cross' || t === 'double' || t === 'half' || t === 'reverse';
 
-// ---- URL state: #/darts?b=<game-format code> ----
+// ---- URL state: darts/?b=<game-format code> ----
 
 function readHash(): Board {
-  const b = new URLSearchParams(location.hash.split('?')[1] ?? '').get('b');
+  const b = query().get('b');
   if (!b) return emptyBoard();
   try {
     return parseCode(b);
@@ -71,7 +72,7 @@ function readHash(): Board {
 
 function writeHash(board: Board) {
   const code = toCode(board);
-  history.replaceState(null, '', code === '00BE' ? '#/darts' : `#/darts?b=${code}`);
+  setQuery('darts', code === '00BE' ? '' : `b=${code}`);
 }
 
 // ---- equation and steps ----
@@ -266,9 +267,7 @@ function Solver() {
   useEffect(() => writeHash(board), [code]);
   useEffect(() => setShown({ steps: false, answer: false }), [code]);
   useEffect(() => {
-    const on = () => location.hash.startsWith('#/darts') && setBoard(readHash());
-    window.addEventListener('hashchange', on);
-    return () => window.removeEventListener('hashchange', on);
+    return onNavigate(() => setBoard(readHash()));
   }, []);
   useEffect(() => {
     if (!status) return;

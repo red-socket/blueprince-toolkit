@@ -4,28 +4,21 @@ import '@fontsource/cinzel/600.css';
 import '@fontsource/cinzel/700.css';
 import '@fontsource-variable/inter';
 import './styles/global.css';
+import { currentRoute, interceptLinks, onNavigate, pathFor, redirectHashLink } from './lib/route';
 import { TIER_LABEL } from './spoilers';
-import { TOOLS } from './tools/registry';
-
-/** The route is the part of the hash before any "?": "#/sigil?c=1" -> "sigil". */
-function currentRoute(): string {
-  return location.hash.replace(/^#\/?/, '').split('?')[0];
-}
+import { SITE, TOOLS } from './tools/registry';
 
 function Home() {
   return (
     <>
       <section class="hero">
         <h1>Blue Prince Toolkit</h1>
-        <p>
-          Fan-made helpers, references and generators for the estate. Anything that could spoil a discovery stays
-          hidden until you ask for it.
-        </p>
+        <p>{SITE.intro}</p>
       </section>
       <ul class="tool-list">
         {TOOLS.map((t) => (
           <li key={t.id}>
-            <a class="tool-card panel" href={`#/${t.id}`}>
+            <a class="tool-card panel" href={pathFor(t.id)}>
               <span class="tool-card__kind label">{t.kind}</span>
               <span class={`tier tier--${t.tier}`}>{TIER_LABEL[t.tier]}</span>
               <h2>{t.title}</h2>
@@ -45,26 +38,34 @@ function Home() {
   );
 }
 
+function NotFound() {
+  return (
+    <section class="hero">
+      <h1>Page not found</h1>
+      <p>
+        There's nothing at this address. <a href={pathFor('')}>Back to the toolkit</a>
+      </p>
+    </section>
+  );
+}
+
 function App() {
   const [route, setRoute] = useState(currentRoute);
-  useEffect(() => {
-    const on = () => setRoute(currentRoute());
-    window.addEventListener('hashchange', on);
-    return () => window.removeEventListener('hashchange', on);
-  }, []);
+  useEffect(() => onNavigate(() => setRoute(currentRoute())), []);
 
   const tool = TOOLS.find((t) => t.id === route);
+  const missing = route !== '' && !tool;
   useEffect(() => {
-    document.title = tool ? `${tool.title} · Blue Prince Toolkit` : 'Blue Prince Toolkit';
+    document.title = tool ? `${tool.title} · ${SITE.name}` : missing ? `Page not found · ${SITE.name}` : SITE.name;
     window.scrollTo(0, 0);
-  }, [tool?.id]);
+  }, [route]);
 
-  const Page = tool?.component ?? Home;
+  const Page = tool?.component ?? (missing ? NotFound : Home);
   return (
     <>
       <header class="site-header">
         <div class="site-header__inner">
-          <a class="site-header__brand" href="#/">
+          <a class="site-header__brand" href={pathFor('')}>
             <img class="site-header__logo" src={`${import.meta.env.BASE_URL}favicon.svg`} alt="" width="30" height="30" />
             Blue Prince Toolkit
           </a>
@@ -83,4 +84,9 @@ function App() {
   );
 }
 
-render(<App />, document.getElementById('app')!);
+redirectHashLink();
+interceptLinks();
+// The build pre-renders each page's text for search engines and link previews; the app replaces it.
+const root = document.getElementById('app')!;
+root.textContent = '';
+render(<App />, root);

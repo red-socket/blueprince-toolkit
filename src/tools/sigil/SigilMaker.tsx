@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import { ToolGate } from '../../components/Spoiler';
+import { onNavigate, query, setQuery } from '../../lib/route';
 import { BORDERS, CORES, SOCIETIES, TRAVELS, WEATHERS } from './data';
 import { copyPng, downloadPng, downloadSvg } from '../../lib/export';
 import {
@@ -23,10 +24,10 @@ type BgChoice = 'none' | 'paper' | 'blueprint' | 'banner' | 'custom';
 
 const DEFAULT_SPEC: SigilSpec = { core: 0, travel: 6, weather: 0, society: 0, border: 0 };
 
-// ---- URL state: #/sigil?c=0&t=6&w=0&m=0&b=0 (indices only, so links don't name any part) ----
+// ---- URL state: sigil/?c=0&t=6&w=0&m=0&b=0 (indices only, so links don't name any part) ----
 
 function readHash(): SigilSpec {
-  const q = new URLSearchParams(location.hash.split('?')[1] ?? '');
+  const q = query();
   const idx = (key: string, list: unknown[], fallback: number | null): number | null => {
     if (!q.has(key)) return fallback;
     const v = q.get(key);
@@ -45,7 +46,7 @@ function readHash(): SigilSpec {
 
 function writeHash(spec: SigilSpec) {
   const v = (n: number | null) => (n === null ? '-' : String(n));
-  history.replaceState(null, '', `#/sigil?c=${v(spec.core)}&t=${v(spec.travel)}&w=${spec.weather}&m=${v(spec.society)}&b=${v(spec.border)}`);
+  setQuery('sigil', `c=${v(spec.core)}&t=${v(spec.travel)}&w=${spec.weather}&m=${v(spec.society)}&b=${v(spec.border)}`);
 }
 
 const rand = (n: number) => Math.floor(Math.random() * n);
@@ -135,12 +136,8 @@ function Maker() {
   const [status, setStatus] = useState('');
 
   useEffect(() => writeHash(spec), [spec]);
-  // A sigil link pasted while the tool is open (replaceState above doesn't fire hashchange).
-  useEffect(() => {
-    const on = () => location.hash.startsWith('#/sigil') && setSpec(readHash());
-    window.addEventListener('hashchange', on);
-    return () => window.removeEventListener('hashchange', on);
-  }, []);
+  // Back and forward between sigil links.
+  useEffect(() => onNavigate(() => setSpec(readHash())), []);
   useEffect(() => {
     if (!status) return;
     const t = setTimeout(() => setStatus(''), 2500);

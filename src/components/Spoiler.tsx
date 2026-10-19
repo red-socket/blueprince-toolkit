@@ -1,4 +1,5 @@
 import type { ComponentChildren } from 'preact';
+import { pathFor } from '../lib/route';
 import { TIER_LABEL, useReveal, type Tier } from '../spoilers';
 
 interface Props {
@@ -54,7 +55,7 @@ export function ToolGate({ id, tier, title, warning, children }: GateProps) {
         <button type="button" class="btn btn--primary" onClick={() => setShown(true)}>
           Open the tool
         </button>
-        <a class="btn" href="#/">
+        <a class="btn" href={pathFor('')}>
           Back to the toolkit
         </a>
       </div>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { ToolGate } from '../../components/Spoiler';
+import { onNavigate, query as urlQuery, setQuery as setUrlQuery } from '../../lib/route';
 import { downloadPng, downloadSvg, type BuiltSvg } from '../../lib/export';
 import { TIER_LABEL, useReveal } from '../../spoilers';
 import { Grid, HEIGHT, RoomIcon, WIDTH } from './Grid';
@@ -30,7 +31,7 @@ const CATEGORIES = ['Blueprint', 'Bedroom', 'Hallway', 'Green Room', 'Shop', 'Re
 const SHAPES: Shape[] = ['dead', 'straight', 'L', 'T', 'cross'];
 
 function loadPlan(): Plan {
-  const p = new URLSearchParams(location.hash.split('?')[1] ?? '').get('p');
+  const p = urlQuery().get('p');
   if (p) return decodePlan(p) ?? emptyPlan();
   try {
     const saved = localStorage.getItem(STORE);
@@ -88,22 +89,19 @@ function PlannerTool() {
 
   const code = encodePlan(plan);
   useEffect(() => {
-    history.replaceState(null, '', code === '1.' ? '#/planner' : `#/planner?p=${code}`);
+    setUrlQuery('planner', code === '1.' ? '' : `p=${code}`);
     try {
       localStorage.setItem(STORE, code);
     } catch {
       // Storage blocked: the plan lives in the link only.
     }
   }, [code]);
-  useEffect(() => {
-    const on = () => {
-      if (!location.hash.startsWith('#/planner')) return;
-      const p = new URLSearchParams(location.hash.split('?')[1] ?? '').get('p');
+  useEffect(() =>
+    onNavigate(() => {
+      const p = urlQuery().get('p');
       if (p && p !== encodePlan(plan)) setPlan(decodePlan(p) ?? emptyPlan());
-    };
-    window.addEventListener('hashchange', on);
-    return () => window.removeEventListener('hashchange', on);
-  });
+    }),
+  );
   useEffect(() => {
     if (!status) return;
     const t = setTimeout(() => setStatus(''), 2500);

@@ -58,11 +58,20 @@ Requirements: Node.js 20 or later.
 
 ```bash
 npm install
-npm run dev      # local server with hot reload
-npm run build    # type-check and build into dist/
+npm run dev      # local server at http://localhost:5173/blueprince-toolkit/
+npm run build    # type-check, build and pre-render into dist/
 ```
 
-`dist/` is a static site with relative paths, so it can be served from any folder (GitHub Pages included).
+The site is built for GitHub Pages at `https://red-socket.github.io/blueprince-toolkit/`. Each tool has its own path (`/planner/`, `/darts/`…) with its state in the query string; old `#/…` links are redirected.
+
+`npm run build` writes a real HTML page per tool, each with its own title, description, canonical URL, Open Graph and Twitter tags and intro text, plus `404.html`, `sitemap.xml` and `robots.txt`. Page texts live in `src/site/pages.json` and must stay spoiler-free. For a custom domain, build with `SITE_URL=https://example.com/ BASE_PATH=/ npm run build`.
+
+The link-preview images in `public/og/` are drawn from `pages.json`. After changing a title or description, redraw them:
+
+```bash
+pip install pillow fonttools brotli
+python3 tools/make_og_images.py
+```
 
 ### Sigil artwork
 

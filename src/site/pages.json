@@ -1,0 +1,46 @@
+{
+  "site": {
+    "name": "Blue Prince Toolkit",
+    "url": "https://red-socket.github.io/blueprince-toolkit/",
+    "description": "Free fan-made tools for Blue Prince: a dartboard calculator, a house planner, a room card maker and more. Spoilers stay hidden until you ask for them.",
+    "intro": "Fan-made helpers, references and generators for the estate. Anything that could spoil a discovery stays hidden until you ask for it."
+  },
+  "tools": [
+    {
+      "id": "planner",
+      "title": "House Planner",
+      "kind": "Tracker",
+      "tier": "early",
+      "blurb": "Lay out a day's house on the 5 × 9 grid, with gem costs, room colours and door checks. Export the plan as an image.",
+      "description": "Plan a day's house in Blue Prince on the 5 × 9 grid: place and turn rooms, add up gems, count room colours and spot doors that can't work. Save or share the plan as an image.",
+      "intro": "Lay out a day's house on the 5 × 9 grid. Pick a room, place it, and the planner adds up the gems, counts the colours and flags doors that can't work."
+    },
+    {
+      "id": "cards",
+      "title": "Room Card Maker",
+      "kind": "Generator",
+      "tier": "none",
+      "blurb": "Design your own room in the style of the estate's floor-plan cards and save it as a picture.",
+      "description": "Make your own Blue Prince room card: choose the name, colour, doors, gem cost, icon, effect text and floor, then save it as a PNG.",
+      "intro": "Design your own floor plan in the style of the estate's room cards, then save it as a picture."
+    },
+    {
+      "id": "darts",
+      "title": "Darts Calculator",
+      "kind": "Solver",
+      "tier": "early",
+      "blurb": "Copy a dartboard and get it written out as an equation, with the working and answer behind a click.",
+      "description": "A calculator for the dartboard puzzle in Blue Prince. Copy the board and it is written out as an equation; the working and the answer stay hidden until you ask.",
+      "intro": "Copy the dartboard by colouring its sections, and the calculator writes it out as an equation. The working and the answer stay hidden until you ask."
+    },
+    {
+      "id": "sigil",
+      "title": "Sigil Maker",
+      "kind": "Generator",
+      "tier": "late",
+      "blurb": "Build a sigil from its parts and export it as an SVG or PNG.",
+      "description": "Build a sigil for Blue Prince from its parts and export it as an SVG or PNG. The tool's contents stay hidden until you choose to open it.",
+      "intro": "Build a sigil from its parts and export it as an SVG or PNG."
+    }
+  ]
+}

@@ -17,6 +17,7 @@ import {
   type Photo,
   type Shape,
 } from './render';
+import { query, setQuery } from '../../lib/route';
 import './cards.css';
 
 const SHAPES: [Shape, string][] = [
@@ -53,7 +54,7 @@ const DEFAULT: CardSpec = {
 // ---- URL state (everything but an uploaded picture) ----
 
 function readHash(): CardSpec {
-  const raw = new URLSearchParams(location.hash.split('?')[1] ?? '').get('c');
+  const raw = query().get('c');
   if (!raw) return DEFAULT;
   try {
     const v = JSON.parse(decodeURIComponent(escape(atob(raw.replace(/-/g, '+').replace(/_/g, '/')))));
@@ -74,7 +75,7 @@ function readHash(): CardSpec {
 function writeHash(spec: CardSpec) {
   const json = JSON.stringify(spec);
   const b64 = btoa(unescape(encodeURIComponent(json))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  history.replaceState(null, '', `#/cards?c=${b64}`);
+  setQuery('cards', `c=${b64}`);
 }
 
 function slug(s: string) {
