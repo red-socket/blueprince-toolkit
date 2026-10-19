@@ -8,8 +8,8 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
 const pages = JSON.parse(readFileSync(join(root, 'src/site/pages.json'), 'utf8'));
-const SITE = (process.env.SITE_URL ?? pages.site.url).replace(/\/?$/, '/');
-const BASE = (process.env.BASE_PATH ?? new URL(SITE).pathname).replace(/\/?$/, '/');
+const SITE = (process.env.SITE_URL || pages.site.url).replace(/\/?$/, '/');
+const BASE = (process.env.BASE_PATH || new URL(SITE).pathname).replace(/\/?$/, '/');
 const template = readFileSync(join(dist, 'index.html'), 'utf8');
 const TIER = { early: 'Early game', mid: 'Mid game', late: 'Late game' };
 

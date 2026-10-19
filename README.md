@@ -66,6 +66,8 @@ The site is built for GitHub Pages at `https://red-socket.github.io/blueprince-t
 
 `npm run build` writes a real HTML page per tool, each with its own title, description, canonical URL, Open Graph and Twitter tags and intro text, plus `404.html`, `sitemap.xml` and `robots.txt`. Page texts live in `src/site/pages.json` and must stay spoiler-free. For a custom domain, build with `SITE_URL=https://example.com/ BASE_PATH=/ npm run build`.
 
+Every push to `main` is built and published by `.github/workflows/deploy.yml`. Once per repository, set Settings → Pages → Source to **GitHub Actions**. For a custom domain, also add the repository variables `SITE_URL` and `BASE_PATH`.
+
 The link-preview images in `public/og/` are drawn from `pages.json`. After changing a title or description, redraw them:
 
 ```bash
