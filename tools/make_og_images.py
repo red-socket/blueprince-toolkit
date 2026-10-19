@@ -215,11 +215,28 @@ def art_morajai(d, cx, cy, r):
         d.polygon([(px, py - q), (px + q, py), (px, py + q), (px - q, py)], fill=(241, 239, 233), outline=(30, 20, 10))
 
 
-ART = {'parlor': art_parlor, 'morajai': art_morajai, 'flags': art_flags, 'letters': art_letters, 'home': art_home, 'planner': art_planner, 'darts': art_darts, 'cards': art_cards, 'sigil': art_sigil}
+def art_tracker(d, cx, cy, r):
+    # Four counter tiles (steps, gems, keys, coins) with the card icons.
+    icons = ['steps', 'gem', 'key', 'coins']
+    values = ['37', '4', '2', '11']
+    w = r * 0.92
+    for k, (name, val) in enumerate(zip(icons, values)):
+        x = cx - w - r * 0.05 + (k % 2) * (w + r * 0.1)
+        y = cy - w - r * 0.05 + (k // 2) * (w + r * 0.1)
+        d.rounded_rectangle([x, y, x + w, y + w], radius=10 * S, fill=SURFACE, outline=(70, 92, 130), width=2 * S)
+        icon = Image.open(ROOT / 'public' / 'card-icons' / f'{name}.webp').convert('RGBA')
+        icon.thumbnail((int(w * 0.34), int(w * 0.34)))
+        IM.paste(icon, (int(x + w / 2 - icon.width / 2), int(y + w * 0.1)), icon)
+        d.text((x + w / 2, y + w * 0.7), val, font=INTER(int(w / S * 0.32), 700), fill=CHALK, anchor='mm')
+
+
+ART = {'tracker': art_tracker, 'parlor': art_parlor, 'morajai': art_morajai, 'flags': art_flags, 'letters': art_letters, 'home': art_home, 'planner': art_planner, 'darts': art_darts, 'cards': art_cards, 'sigil': art_sigil}
 
 
 def draw(name, title, text, tier=None):
+    global IM
     im = Image.new('RGB', (W, H), NAVY)
+    IM = im
     d = ImageDraw.Draw(im)
     m = 36 * S
     d.rounded_rectangle([m, m, W - m, H - m], radius=10 * S, outline=(70, 92, 130), width=2 * S)

@@ -9,6 +9,7 @@ import { MoraJai } from './morajai/MoraJai';
 import { Parlor } from './parlor/Parlor';
 import { Planner } from './planner/Planner';
 import { SigilMaker } from './sigil/SigilMaker';
+import { Tracker } from './tracker/Tracker';
 
 export interface Tool {
   id: string; // route: /<id>/
@@ -23,6 +24,7 @@ export interface Tool {
 // Titles and texts live in site/pages.json, which the build also uses for each page's HTML and meta tags.
 const COMPONENTS: Record<string, FunctionComponent> = {
   planner: Planner,
+  tracker: Tracker,
   cards: CardMaker,
   letters: LetterMaker,
   darts: DartsSolver,

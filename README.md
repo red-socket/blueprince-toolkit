@@ -10,6 +10,10 @@ Blue Prince is a game about discovery, so the toolkit hides anything that could 
 
 ## Tools
 
+### Run Tracker *(no spoilers)*
+
+Keep count while you play, on a phone or a second screen: big counters for steps, gems, keys, coins and dice (plus any you add), a one-tap "Entered a room" button (one step, one room), undo, a low-steps warning, notes, and "New day", which files the day in a history (downloadable as CSV) and resets the counters to the start values you set. It can keep a phone's screen on. Everything is saved in your browser only.
+
 ### House Planner *(early game)*
 
 Lay out a day's house on the 5 × 9 grid, with the Entrance Hall and Antechamber in place.

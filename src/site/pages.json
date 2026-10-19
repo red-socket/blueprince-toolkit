@@ -16,6 +16,15 @@
       "intro": "Lay out a day's house on the 5 × 9 grid. Pick a room, place it, and the planner adds up the gems, counts the colours and flags doors that can't work."
     },
     {
+      "id": "tracker",
+      "title": "Run Tracker",
+      "kind": "Tracker",
+      "tier": "none",
+      "blurb": "Keep count of a day's steps, gems, keys and coins while you play, with undo and a history of past days.",
+      "description": "A run tracker for Blue Prince: big counters for steps, gems, keys, coins and dice, a one-tap 'entered a room' button, undo, custom counters and a history of past days. Works on a phone beside the game.",
+      "intro": "Keep count of a day's steps, gems, keys and coins while you play, on a phone or a second screen. It's saved in this browser."
+    },
+    {
       "id": "cards",
       "title": "Room Card Maker",
       "kind": "Generator",
