@@ -151,7 +151,25 @@ def art_sigil(d, cx, cy, r):
     d.ellipse([cx - r * 0.14, cy - r * 0.14, cx + r * 0.14, cy + r * 0.14], outline=CHALK, width=int(r * 0.03))
 
 
-ART = {'home': art_home, 'planner': art_planner, 'darts': art_darts, 'cards': art_cards, 'sigil': art_sigil}
+def art_letters(d, cx, cy, r):
+    # A sheet of the estate's paper: red letterhead rule, a drop cap and lines of writing.
+    w, h = r * 1.5, r * 1.95
+    x0, y0 = cx - w / 2, cy - h / 2
+    d.rectangle([x0 + 10 * S, y0 + 12 * S, x0 + w + 10 * S, y0 + h + 12 * S], fill=(10, 18, 34))
+    d.rectangle([x0, y0, x0 + w, y0 + h], fill=(243, 234, 214), outline=(43, 36, 32), width=3 * S)
+    d.rectangle([x0 + w * 0.06, y0 + h * 0.05, x0 + w * 0.94, y0 + h * 0.95], outline=(43, 36, 32), width=2 * S)
+    red = (122, 10, 20)
+    d.line([(x0 + w * 0.15, y0 + h * 0.16), (x0 + w * 0.85, y0 + h * 0.16)], fill=red, width=4 * S)
+    d.polygon([(cx, y0 + h * 0.16 - 9 * S), (cx + 9 * S, y0 + h * 0.16), (cx, y0 + h * 0.16 + 9 * S), (cx - 9 * S, y0 + h * 0.16)], fill=red)
+    d.text((x0 + w * 0.13, y0 + h * 0.34), 'D', font=CINZEL(int(r / S * 0.42)), fill=red, anchor='ls')
+    for k in range(9):
+        y = y0 + h * (0.27 + k * 0.065)
+        start = x0 + w * (0.36 if k < 2 else 0.13)
+        end = x0 + w * (0.87 - (0.25 if k in (4, 8) else 0))
+        d.line([(start, y), (end, y)], fill=(60, 55, 70), width=3 * S)
+
+
+ART = {'letters': art_letters, 'home': art_home, 'planner': art_planner, 'darts': art_darts, 'cards': art_cards, 'sigil': art_sigil}
 
 
 def draw(name, title, text, tier=None):

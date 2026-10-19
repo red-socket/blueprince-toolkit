@@ -3,6 +3,7 @@ import pages from '../site/pages.json';
 import type { Tier } from '../spoilers';
 import { CardMaker } from './cards/CardMaker';
 import { DartsSolver } from './darts/DartsSolver';
+import { LetterMaker } from './letters/LetterMaker';
 import { Planner } from './planner/Planner';
 import { SigilMaker } from './sigil/SigilMaker';
 
@@ -20,6 +21,7 @@ export interface Tool {
 const COMPONENTS: Record<string, FunctionComponent> = {
   planner: Planner,
   cards: CardMaker,
+  letters: LetterMaker,
   darts: DartsSolver,
   sigil: SigilMaker,
 };

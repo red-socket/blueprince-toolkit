@@ -2,7 +2,7 @@
   "site": {
     "name": "Blue Prince Toolkit",
     "url": "https://red-socket.github.io/blueprince-toolkit/",
-    "description": "Free fan-made tools for Blue Prince: a dartboard calculator, a house planner, a room card maker and more. Spoilers stay hidden until you ask for them.",
+    "description": "Free fan-made tools for Blue Prince: a dartboard calculator, a house planner, room card and letter makers, and more. Spoilers stay hidden until you ask for them.",
     "intro": "Fan-made helpers, references and generators for the estate. Anything that could spoil a discovery stays hidden until you ask for it."
   },
   "tools": [
@@ -23,6 +23,15 @@
       "blurb": "Design your own room in the style of the estate's floor-plan cards and save it as a picture.",
       "description": "Make your own Blue Prince room card: choose the name, colour, doors, gem cost, icon, effect text and floor, then save it as a PNG.",
       "intro": "Design your own floor plan in the style of the estate's room cards, then save it as a picture."
+    },
+    {
+      "id": "letters",
+      "title": "Letter & Note Maker",
+      "kind": "Generator",
+      "tier": "none",
+      "blurb": "Write a letter, memo, note or notice on the estate's paper and save it as a picture.",
+      "description": "Write letters, memos, notes and notices in the style of Blue Prince's documents: drawn frames, ornate capitals, handwriting or typewriter text, stamps and worn paper. Save them as PNG.",
+      "intro": "Write a letter, memo, note or notice on the estate's paper, then save it as a picture."
     },
     {
       "id": "darts",

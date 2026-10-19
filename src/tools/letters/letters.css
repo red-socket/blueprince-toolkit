@@ -1,0 +1,65 @@
+.letters__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.letters__preview {
+  position: sticky;
+  top: 1rem;
+}
+
+@media (max-width: 900px) {
+  .letters__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .letters__preview {
+    position: static;
+  }
+}
+
+.doc-canvas {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  margin: 0 auto;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+.letters .input {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--input-bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.letters textarea.input {
+  resize: vertical;
+}
+
+.letters .swatch-dot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-right: 0.15rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  vertical-align: -1px;
+}
+
+.checks {
+  display: grid;
+  gap: 0.1rem;
+  margin-top: 0.4rem;
+}
+
+.checks .check {
+  margin-top: 0.5rem;
+}
